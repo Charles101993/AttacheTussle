@@ -2,13 +2,16 @@
 var game_state = {
 	// param is string denoting whether client is player 1 or 2
 	init: function(param){
+		console.log('game_state loaded');		
 		
-		var player1, player2;
+		var player, opponent;
 		var platforms;
 		var cursors;
 
 		var score = 0;
 		var scoreText;
+		
+		frame = false;
 
 		playerID = param;
 		
@@ -20,6 +23,50 @@ var game_state = {
 			//  Add and update the score
 			score += 10;
 			scoreText.text = 'Score: ' + score;
+		}
+		
+		left = function(x,y){
+			
+			var client_packet = { 
+			   input: 'left',
+				    x: x,
+				    y: y 
+			}
+											
+			socket.emit('input', client_packet);
+		}
+		
+		right = function(x,y){
+			
+			var client_packet = { 
+			   input: 'right',
+				    x: x,
+				    y: y 
+			}
+											
+			socket.emit('input', client_packet);
+		}
+		
+		up = function(x,y){
+			
+			var client_packet = { 
+			   input: 'up',
+				    x: x,
+				    y: y 
+			}
+											
+			socket.emit('input', client_packet);
+		}
+		
+		down = function(x,y){
+			
+			var client_packet = { 
+			   input: 'down',
+				    x: x,
+				    y: y
+			}
+											
+			socket.emit('input', client_packet);
 		}
 	},
 	
@@ -65,17 +112,17 @@ var game_state = {
 		
 		// The player and its settings
 		if(playerID == 'player 1'){
-			player1 = game.add.sprite(32, game.world.height - 113, 'dude');
-			player2 = game.add.sprite(736, game.world.height - 113, 'dude');
+			player = game.add.sprite(32, game.world.height - 113, 'dude');
+			opponent = game.add.sprite(736, game.world.height - 113, 'dude');
 		}
 		else if(playerID == 'player 2'){
-			player1 = game.add.sprite(736, game.world.height - 113, 'dude');
-			player2 = game.add.sprite(32, game.world.height - 113, 'dude');
+			opponent = game.add.sprite(32, game.world.height - 113, 'dude');
+			player = game.add.sprite(736, game.world.height - 113, 'dude');
 		}
 		
 		//  We need to enable physics on the player
-		game.physics.arcade.enable(player1);
-		game.physics.arcade.enable(player2);
+		game.physics.arcade.enable(player);
+		game.physics.arcade.enable(opponent);
 
 		//  The score
 		scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -84,97 +131,123 @@ var game_state = {
 		cursors = game.input.keyboard.createCursorKeys();
 		
 		//  Player physics properties. Give the little guy a slight bounce.
-		player1.body.bounce.y = 0.2;
-		player1.body.gravity.y = 300;
-		player1.body.collideWorldBounds = true;
+		player.body.bounce.y = 0.2;
+		player.body.gravity.y = 300;
+		player.body.collideWorldBounds = true;
 
 		//  Our two animations, walking left and right.
-		player1.animations.add('left', [0, 1, 2, 3], 10, true);
-		player1.animations.add('right', [5, 6, 7, 8], 10, true);
+		player.animations.add('left', [0, 1, 2, 3], 10, true);
+		player.animations.add('right', [5, 6, 7, 8], 10, true);
 		
 		//  Player physics properties. Give the little guy a slight bounce.
-		player2.body.bounce.y = 0.2;
-		player2.body.gravity.y = 300;
-		player2.body.collideWorldBounds = true;
+		opponent.body.bounce.y = 0.2;
+		opponent.body.gravity.y = 300;
+		opponent.body.collideWorldBounds = true;
 
 		//  Our two animations, walking left and right.
-		player2.animations.add('left', [0, 1, 2, 3], 10, true);
-		player2.animations.add('right', [5, 6, 7, 8], 10, true);
+		opponent.animations.add('left', [0, 1, 2, 3], 10, true);
+		opponent.animations.add('right', [5, 6, 7, 8], 10, true);
 		
 	},
 	
 	update: function(){
 		
+		// skip every other frame
+		if(!frame) {
+			frame = true;
+			return;
+		}
+			
+		//  player -------------------------------------------------
+		
 		//  Collide the player and the stars with the platforms
-		game.physics.arcade.collide(player1, platforms);
-		game.physics.arcade.collide(player2, platforms);
+		game.physics.arcade.collide(player, platforms);
 
-		//  Reset the players velocity (movement)
-		player1.body.velocity.x = 0;
-		player2.body.velocity.x = 0;
-
+		//  Reset the player's velocity (movement)
+		player.body.velocity.x = 0;
+		
 		if (cursors.left.isDown)
 		{
-			socket.emit('input','left');
+			left(player.x, player.y);
+			
 			//  Move to the left
-			player1.body.velocity.x = -150;
+			player.body.velocity.x = -150;
 
-			player1.animations.play('left');
+			player.animations.play('left');
 		}
 		else if (cursors.right.isDown)
 		{
-			socket.emit('input','right');
+			right(player.x, player.y);
+			
 			//  Move to the right
-			player1.body.velocity.x = 150;
+			player.body.velocity.x = 150;
 
-			player1.animations.play('right');
+			player.animations.play('right');
 		}
 		else
 		{
 			//  Stand still
-			player1.animations.stop();
+			player.animations.stop();
 
-			player1.frame = 4;
+			player.frame = 4;
 		}
 		
 		//  Allow the player to jump if they are touching the ground.
-		if (cursors.up.isDown && player1.body.touching.down)
+		if (cursors.up.isDown && player.body.touching.down)
 		{
-			socket.emit('input','up');
-			player1.body.velocity.y = -350;
+			up(player.x, player.y);
+
+			player.body.velocity.y = -350;
 		}
 		
-		//  Player 2		
-		if (player2_input == 'left')
+		//  opponent ------------------------------------------------
+		
+		//  Reset the opponent's velocity (movement)
+		opponent.body.velocity.x = 0;	
+		
+		// sync opponent position
+		if(opponent_packet.x != null && opponent_packet.y != null){
+			if(opponent_packet.y > game.world.height - 113) opponent_packet.y = game.world.height - 112;
+			
+			opponent.x=opponent_packet.x;
+			opponent.y=opponent_packet.y;
+		}
+		
+		//  Collide the opponent with the platforms
+		game.physics.arcade.collide(opponent, platforms);		
+		
+		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
-			player2.body.velocity.x = -150;
+			opponent.body.velocity.x = -150;
 
-			player2.animations.play('left');
+			opponent.animations.play('left');
 		}
-		else if (player2_input == 'right')
+		else if (opponent_packet.input == 'right')
 		{
 			//  Move to the right
-			player2.body.velocity.x = 150;
+			opponent.body.velocity.x = 150;
 
-			player2.animations.play('right');
+			opponent.animations.play('right');
 		}
 		else
 		{
 			//  Stand still
-			player2.animations.stop();
+			opponent.animations.stop();
 
-			player2.frame = 4;
+			opponent.frame = 4;
 		}
 		
 		//  Allow the player to jump if they are touching the ground.
-		if (player2_input == 'up' && player2.body.touching.down)
+		if (opponent_packet.input == 'up' && opponent.body.touching.down)
 		{
-			player2.body.velocity.y = -350;
+			opponent.body.velocity.y = -350;
 		}
-		
-		// reset player2 input
-		player2_input = null;
+
+		// reset opponent input
+		opponent_packet.input = '';
+		opponent_packet.x = null;
+		opponent_packet.y = null;
 
 	},
 	

@@ -18,11 +18,14 @@
 
 <script type="text/javascript">
 var socket = io();
-socket.on();
 	
-var player2_input;
+var opponent_packet = { 
+   input: '',
+		x: null,
+		y: null 
+}
 socket.on('opponent input', function(input){
-	player2_input = input;
+	opponent_packet = input;
 });	
 	
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
