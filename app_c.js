@@ -3,7 +3,7 @@ var app = express();
 var serv = require('http').Server(app);
  
 app.get('/',function(req, res) {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index_c.html');
 });
 //app.use('/client',express.static(__dirname + '/client'));
 app.use('/assets',express.static(__dirname + '/assets'));
