@@ -1,7 +1,7 @@
 //world game state
 var game_state = {
 	// param is string denoting whether client is player 1 or 2
-	init: function(param){
+	init: function(){
 		console.log('game_state loaded');		
 		
 		var player, opponent;
@@ -12,8 +12,6 @@ var game_state = {
 		var scoreText;
 		
 		frame = false;
-
-		playerID = param;
 		
 		collectStar = function(player, star){
 	
@@ -81,6 +79,11 @@ var game_state = {
 	create: function(){
 		
 		game.stage.disableVisibilityChange = true;
+		
+		menu_music.destroy();
+		
+		game_music = game.add.audio('game_music');
+		game_music.play();
 	
 		//  We're going to be using physics, so enable the Arcade Physics system
 		game.physics.startSystem(Phaser.Physics.ARCADE);

@@ -1,6 +1,9 @@
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
-<script type="text/javascript" src="assets/states/menu_state1.js"></script>
+<script type="text/javascript" src="assets/states/boot.js"></script>
+<script type="text/javascript" src="assets/states/start_menu.js"></script>
+<script type="text/javascript" src="assets/states/character_select.js"></script>
+<script type="text/javascript" src="assets/states/wait_for_player.js"></script>
 <script type="text/javascript" src="assets/states/game_state.js"></script>
 
 
@@ -24,16 +27,33 @@ var opponent_packet = {
 		x: null,
 		y: null 
 }
+var playerID;
+var opponent_char_counter;
+var opponent_ready = false;
+var menu_music;
+var game_music;
+
 socket.on('opponent input', function(input){
 	opponent_packet = input;
-});	
+});
+
+socket.on('opponent character', function(input){
+	opponent_char_counter = input;
+});
+
+socket.on('opponent ready', function(input){
+	opponent_ready = input;
+});
 	
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 
-game.state.add('menu1', menu_state1);
+game.state.add('boot', boot);
+game.state.add('start_menu', start_menu);
+game.state.add('wait_for_player', wait_for_player);
+game.state.add('character_select', character_select);
 game.state.add('game', game_state);
 
-game.state.start('menu1');
+game.state.start('boot');
 
 </script>
 
