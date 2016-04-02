@@ -2,7 +2,7 @@ var character_select = {
 	
 	init: function() {
 		
-		game.stage.disableVisibilityChange = true;
+		//game.stage.disableVisibilityChange = true;
 		
 		player_char_counter = 0;
 		var readyButton;
@@ -130,10 +130,11 @@ var character_select = {
 	},
 	
 	update: function() {
+		
 		if(opponent_ready){
 			
 			if(opponent_char_counter == player_char_counter){				
-				prevChar();
+				this.prevChar();
 			}
 		}
 		
