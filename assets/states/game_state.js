@@ -83,7 +83,10 @@ var game_state = {
 		menu_music.destroy();
 		
 		game_music = game.add.audio('game_music');
+
 		game_music.play();
+		
+		game_music.onLoop.add(function(){    game_music.play();},this);
 	
 		//  We're going to be using physics, so enable the Arcade Physics system
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -154,6 +157,11 @@ var game_state = {
 	},
 	
 	update: function(){
+		
+		if(!game_music.isPlaying){
+			
+			game_music.play();
+		}
 		
 		// skip every other frame
 		if(!frame) {

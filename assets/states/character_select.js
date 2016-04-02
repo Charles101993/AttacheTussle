@@ -1,8 +1,9 @@
 var character_select = {
 	
+	//initialize variables as global for this state
 	init: function() {
 		
-		//game.stage.disableVisibilityChange = true;
+		game.stage.disableVisibilityChange = true;
 		
 		player_char_counter = 0;
 		var readyButton;
@@ -13,6 +14,7 @@ var character_select = {
 		player_ready = false;
 	},
 	
+	//load assets that are used in this state
 	preload: function() {
 		
 		game.load.spritesheet('ready_button', 'assets/ready_button.png', 150, 75);
@@ -22,6 +24,7 @@ var character_select = {
 		game.load.spritesheet('up_arrow', 'assets/up_arrow_button.png', 50, 75);
 	},
 	
+	//create the screen that is sent to both clients
 	create: function() {
 		
 		game.add.sprite(0, 0, 'character_select_background');
@@ -32,6 +35,7 @@ var character_select = {
 		readyButton = this.game.add.button(400, 500, 'ready_button', this.playerReady, this, 1, 0, 1);
 		readyButton.anchor.setTo(0.5, 0.5);
 		
+		//if the client is assigned the ID player 1, load that clients assets
 		if(playerID == 'player 1'){
 			
 			player_character = game.add.sprite(140,320, 'dude',0);
@@ -45,6 +49,8 @@ var character_select = {
 			
 			opponent_character = game.add.sprite(640,320, 'dude',0);
 		}
+		
+		//if the client is assigned the ID player 2, load that clients assets
 		else if(playerID == 'player 2'){
 			
 			player_character = game.add.sprite(640,320, 'dude',0);
@@ -62,10 +68,12 @@ var character_select = {
 		
 	},
 	
+	//called when the down button is pressed
 	nextChar: function(){
 	
 		player_char_counter--;
 		
+		//if the opponent has chosen their character, prevent player from choosing the same character 
 		if(opponent_ready){
 			
 			if(opponent_char_counter == player_char_counter){				
@@ -73,6 +81,7 @@ var character_select = {
 			}
 		}
 		
+		//choose which sprite to display
 		console.log(player_char_counter);
 		if(player_char_counter < 0) player_char_counter = 3;
 		
@@ -90,10 +99,13 @@ var character_select = {
 		socket.emit('player character',player_char_counter);
 	},
 	
+	//called when the up button is pressed
 	prevChar: function(){
 	
 		player_char_counter++;
 		
+		
+		//if the opponent has chosen their character, prevent player from choosing the same character
 		if(opponent_ready){
 			
 			if(opponent_char_counter == player_char_counter){				
@@ -101,6 +113,7 @@ var character_select = {
 			}
 		}
 		
+		//choose which sprite to display
 		console.log(player_char_counter);
 		if(player_char_counter > 3) player_char_counter = 0;
 		
@@ -118,19 +131,30 @@ var character_select = {
 		socket.emit('player character',player_char_counter);
 	},
 	
+	//called when the player presses the ready button
 	playerReady: function() {
 		
+		//destory buttons so they can't change their character once ready
 		readyButton.destroy();
 		upButton.destroy();
 		downButton.destroy();
 		
+		//let the server know that the player is ready
 		player_ready = true;
 		
 		socket.emit('player ready', player_ready);
 	},
 	
+	//if the menu music is not playing, play the song again
 	update: function() {
 		
+		if(!menu_music.isPlaying){
+			
+			menu_music.play();
+		}
+		
+		//if the opponent has chosen their character and the player is on the same character,
+		//change players character so that the same character can't be picked
 		if(opponent_ready){
 			
 			if(opponent_char_counter == player_char_counter){				
@@ -138,6 +162,7 @@ var character_select = {
 			}
 		}
 		
+		//used to show players their opponents character
 		switch(opponent_char_counter){
 			case 0: opponent_character.frame = 0;
 			   break;
@@ -150,6 +175,8 @@ var character_select = {
 		}
 		console.log('player: ' + player_ready);
 		console.log('opponent: ' + opponent_ready);
+		
+		//if both players are ready go to the game state
 		if(player_ready && opponent_ready){
 			
 			game.state.start('game');
