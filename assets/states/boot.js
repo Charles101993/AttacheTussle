@@ -1,5 +1,9 @@
 var boot = {
-
+	
+	init: function(){
+		game.stage.disableVisibilityChange = true;
+	},
+	
 	preload: function() {
 	
 		game.load.audio('menu_music', 'assets/menu_music.mp3');

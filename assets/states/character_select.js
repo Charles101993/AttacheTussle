@@ -1,6 +1,9 @@
 var character_select = {
 	
 	init: function() {
+		
+		game.stage.disableVisibilityChange = true;
+		
 		player_char_counter = 0;
 		var readyButton;
 		var upButton;
@@ -20,8 +23,6 @@ var character_select = {
 	},
 	
 	create: function() {
-		
-		game.stage.disableVisibilityChange = true;
 		
 		game.add.sprite(0, 0, 'character_select_background');
 		
@@ -64,8 +65,16 @@ var character_select = {
 	nextChar: function(){
 	
 		player_char_counter--;
+		
+		if(opponent_ready){
+			
+			if(opponent_char_counter == player_char_counter){				
+				player_char_counter--;
+			}
+		}
+		
 		console.log(player_char_counter);
-		if(player_char_counter == -1) player_char_counter = 3;
+		if(player_char_counter < 0) player_char_counter = 3;
 		
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
@@ -84,8 +93,16 @@ var character_select = {
 	prevChar: function(){
 	
 		player_char_counter++;
+		
+		if(opponent_ready){
+			
+			if(opponent_char_counter == player_char_counter){				
+				player_char_counter++;
+			}
+		}
+		
 		console.log(player_char_counter);
-		if(player_char_counter == 4) player_char_counter = 0;
+		if(player_char_counter > 3) player_char_counter = 0;
 		
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
@@ -113,12 +130,10 @@ var character_select = {
 	},
 	
 	update: function() {
-		
 		if(opponent_ready){
 			
-			if(opponent_char_counter == player_char_counter){
-				
-				player_char_counter++;
+			if(opponent_char_counter == player_char_counter){				
+				prevChar();
 			}
 		}
 		
