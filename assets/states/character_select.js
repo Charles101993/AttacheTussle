@@ -16,7 +16,7 @@ var character_select = {
 	
 	//load assets that are used in this state
 	preload: function() {
-		
+			
 		game.load.spritesheet('ready_button', 'assets/ready_button.png', 150, 75);
 		game.load.image('character_select_background', 'assets/character_select_background.png');
 		game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
@@ -64,8 +64,7 @@ var character_select = {
 			
 			opponent_character = game.add.sprite(140,320, 'dude',0);
 		}
-		
-		
+	
 	},
 	
 	//called when the down button is pressed
