@@ -85,6 +85,20 @@ var game_state = {
 			}
 			socket.emit('input', client_packet);
 		}
+		emit_ass_l = function(){
+			var client_packet = {
+			   input: 'ass_l'
+			}
+			socket.emit('input', client_packet);
+		}
+		emit_ass_r = function(){	
+			var client_packet = { 
+			   input: 'ass_r'
+			}
+			socket.emit('input', client_packet);
+		}
+		
+		
 		can_move = true;
 		dash_count = 0;
 
@@ -95,8 +109,8 @@ var game_state = {
 
 		game.load.image('sky', 'assets/sky.png');
 		game.load.image('ground', 'assets/platform.png');
-		game.load.spritesheet('dude', 'assets/dude.png', 45.1, 74);
-		game.load.spritesheet('dude_no_purse', 'assets/dude_no_purse.png', 45.1, 74);
+		game.load.spritesheet('dude', 'assets/dude.png', 58.25, 74);
+		game.load.spritesheet('dude_no_purse', 'assets/dude_no_purse.png', 58.25, 74);
 		game.load.spritesheet('purse', 'assets/purse.png', 43, 50);
 	},
 	
@@ -194,8 +208,8 @@ var game_state = {
 		//  Our two animations, walking left and right.
 		player.animations.add('right', [0, 1, 2], 10, true);
 		player.animations.add('left', [4, 5, 6], 10, true);
-		player.animations.add('l_ass', [7], 10, true);
-		player.animations.add('r_ass', [8], 10, true);
+		player.animations.add('l_ass', [11], 10, true);
+		player.animations.add('r_ass', [12], 10, true);
 		player.animations.add('taunt', [7,8,9,8], 1, true);
 
 		//  Player physics properties. Give the little guy a slight bounce.
@@ -206,8 +220,8 @@ var game_state = {
 		//  Our two animations, walking left and right.
 		opponent.animations.add('right', [0, 1, 2], 10, true);
 		opponent.animations.add('left', [4, 5, 6], 10, true);
-		opponent.animations.add('l_ass', [7], 10, true);
-		opponent.animations.add('r_ass', [8], 10, true);
+		opponent.animations.add('l_ass', [11], 10, true);
+		opponent.animations.add('r_ass', [12], 10, true);
 		opponent.animations.add('taunt', [7,8,9,8], 1, true);
 
 		a_key = game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -262,6 +276,8 @@ var game_state = {
 		stop_taunt = function(){
 			can_move = true;
 		}
+
+
 		player.purse = false;
 		opponent.purse = false;
 		player.dash = true;
@@ -314,13 +330,28 @@ var game_state = {
 				player.body.velocity.x = 400;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
+			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
+				emit_ass_l();
+				player.body.velocity.x = -75;
+				player.frame = 11;
+				
+			}
+			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
+				emit_ass_r();
+				player.body.velocity.x = 75;
+				player.frame = 10;
+				
+			}
+			else if (s_key.isDown && !player_collide && !player.purse){
+				player.frame = 10;
+			}
 			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
 				emit_purse_swap();
-				player.animations.play('l_ass');
+				player.frame = 11;
 				player.purse = true;
 				opponent.purse = false;
 				player.loadTexture('dude', 0, false);
-				opponent.loadTexture('dude_no_purse', 0, false);				
+				opponent.loadTexture('dude_no_purse', 0, false);	
 			}
 			else if (cursors.left.isDown)
 			{
@@ -383,10 +414,12 @@ var game_state = {
 		}
 		else if (opponent_packet.input == 'swap')
 		{
+			can_move = false;
 			player.purse = false;
 			opponent.purse = true;
 			player.loadTexture('dude_no_purse', 0, false);
 			opponent.loadTexture('dude', 0, false);
+			game.time.events.add(Phaser.Timer.SECOND * 1, stop_taunt, this);
 		}
 		else if (opponent_packet.input == 'taunt')
 		{
@@ -405,6 +438,16 @@ var game_state = {
 				dash_count = 0;
 			}
 			opponent.body.velocity.x = 400;
+		}
+		else if (opponent_packet.input == 'ass_r')
+		{
+			opponent.body.velocity.x = 75;
+			opponent.frame = 10;
+		}
+		else if (opponent_packet.input == 'ass_l')
+		{
+			opponent.body.velocity.x = -75;
+			opponent.frame = 11;
 		}
 		else
 		{
