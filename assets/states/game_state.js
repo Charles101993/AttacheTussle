@@ -1,29 +1,19 @@
 //world game state
 var game_state = {
 	// param is string denoting whether client is player 1 or 2
-	init: function(param){
+	init: function(){
 		console.log('game_state loaded');		
 		
 		var player, opponent;
 		var platforms;
 		var cursors;
 
-		score = 0;
-		var scoreText;
+		player_score = 0;
+		opponent_score = 0;
+		var player_score_text;
+		var opponent_score_text;
 		
 		frame = false;
-
-		playerID = param;
-		
-		collectStar = function(player, star){
-	
-			// Removes the star from the screen
-			star.kill();
-
-			//  Add and update the score
-			score += 10;
-			scoreText.text = 'Score: ' + score;
-		}
 		
 		left = function(x,y){
 			
@@ -166,20 +156,28 @@ var game_state = {
 		if(playerID == 'player 1'){
 			player = game.add.sprite(32, game.world.height - 150, 'dude_no_purse');
 			opponent = game.add.sprite(736, game.world.height - 150, 'dude_no_purse');
+			
+			//  player score
+			player_score_text = game.add.text(100, 700, String(player_score), { fontSize: '32px', fill: '#000' });
+			//  opponent score
+			opponent_score_text = game.add.text(700, 700, String(opponent_score), { fontSize: '32px', fill: '#000' });
 		}
 		else if(playerID == 'player 2'){
 			opponent = game.add.sprite(32, game.world.height - 150, 'dude_no_purse');
 			player = game.add.sprite(736, game.world.height - 150, 'dude_no_purse');
+			
+			//  player score
+			player_score_text = game.add.text(700, 700, String(player_score), { fontSize: '32px', fill: '#000' });
+			//  opponent score
+			opponent_score_text = game.add.text(100,700, String(opponent_score), { fontSize: '32px', fill: '#000' });
+
 		}
 		
 		//  We need to enable physics on the player
 		game.physics.arcade.enable(player);
 		game.physics.arcade.enable(opponent);
 		game.physics.arcade.enable(purse);
-
-		//  The score
-		scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
+		
 		//  Our controls.
 		cursors = game.input.keyboard.createCursorKeys();
 		
@@ -239,8 +237,25 @@ var game_state = {
 		start_taunt_4 = function(p_or_o){
 			p_or_o.frame = 8;
 			game.time.events.add(Phaser.Timer.QUARTER * 2, stop_taunt, this);
-			score += 1;
-			scoreText.text = 'Score: ' + score;
+			
+			if(p_or_o == opponent){
+				opponent_score += 1;
+				opponent_score_text.text = String(opponent_score);
+				
+				if(opponent_score == 10){
+					socket.emit('game end', playerID);
+					game.state.start('game_end', false, true, 'lose', player_score, opponent_score);
+				}
+			}
+			else if(p_or_o == player){
+				player_score += 1;
+				player_score_text.text = String(player_score);
+				
+				if(player_score == 10){
+					socket.emit('game end', playerID);
+					game.state.start('game_end', false, true, 'win', player_score, opponent_score);
+				}
+			}
 
 		}
 		stop_taunt = function(){
@@ -398,7 +413,7 @@ var game_state = {
 			//opponent.frame = 4;
 		}
 		
-		//  Allow the player to jump if they are touching the ground.
+		//  Allow the opponent to jump if they are touching the ground.
 		if (opponent_packet.input == 'up' && opponent.body.touching.down)
 		{
 			opponent.body.velocity.y = -460;
