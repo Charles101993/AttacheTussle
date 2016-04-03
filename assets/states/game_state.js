@@ -82,14 +82,16 @@ var game_state = {
 		
 		game.stage.disableVisibilityChange = true;
 		
-		menu_music.destroy();
+		menu_music.stop();
 		
 		game_music = game.add.audio('game_music');
 
-		game_music.pause();
+		//menu_music.stop();
 		
-		game_music.onLoop.add(function(){    game_music.play();},this);
-	
+		//game_music.onLoop.add(function(){    game_music.play();},this);
+		
+		game_music.play();
+		
 		//  We're going to be using physics, so enable the Arcade Physics system
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 

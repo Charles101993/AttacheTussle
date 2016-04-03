@@ -28,7 +28,13 @@ var character_select = {
 	//create the screen that is sent to both clients
 	create: function() {
 		
-		//menu_music = game.add.audio('menu_music');
+		menu_music = game.add.audio('menu_music');
+		
+		if(music_start == true){
+			
+			music_start = false;
+			menu_music.play();
+		}
 		
 		game.add.sprite(0, 0, 'character_select_background');
 		

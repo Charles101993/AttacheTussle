@@ -25,6 +25,7 @@ var game_end_state = {
 			if(opponent_rematch == true){
 				opponent_rematch = null;
 				player_rematch = null;
+				music_start = true;
 				game.state.start('character_select');
 			}
 			else
@@ -65,11 +66,13 @@ var game_end_state = {
 		if(opponent_rematch == false){
 			opponent_rematch = null;
 			player_rematch = null;
+			socket.emit('game end choice', 'main menu');
 			game.state.start('start_menu');
 		}
 		else if( (player_rematch == true) && (opponent_rematch == true) ){
 			opponent_rematch = null;
 			player_rematch = null;
+			music_start = true;
 			game.state.start('character_select');
 		}
 	}
