@@ -7,6 +7,6 @@ https://nodejs.org/en/
 
 **To run:**  
 Log into compute.cse.tamu.edu on putty.  
-Type "node app.js" into command line.  
+Type *"node app.js"* into command line.  
 The server will start.  
 On google chrome, go to "compute-linux1.cs.tamu.edu:10000" to start the game.
