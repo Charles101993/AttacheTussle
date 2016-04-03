@@ -28,6 +28,8 @@ var character_select = {
 	//create the screen that is sent to both clients
 	create: function() {
 		
+		//menu_music = game.add.audio('menu_music');
+		
 		game.add.sprite(0, 0, 'character_select_background');
 		
 		waitingButton = game.add.sprite(400, 500, 'ready_button', 2);
@@ -148,10 +150,7 @@ var character_select = {
 	//if the menu music is not playing, play the song again
 	update: function() {
 		
-		if(!menu_music.isPlaying){
-			
-			menu_music.play();
-		}
+		//menu_music.resume();
 		
 		//if the opponent has chosen their character and the player is on the same character,
 		//change players character so that the same character can't be picked

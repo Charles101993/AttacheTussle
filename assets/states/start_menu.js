@@ -16,7 +16,9 @@ var start_menu = {
 		
 		//add audio to the start menu and play it
 		//set loop to true so that the audio file will start over if the song ends
+
 		menu_music = game.add.audio('menu_music');
+		
 		menu_music.loop = true;
 		menu_music.play();
 		

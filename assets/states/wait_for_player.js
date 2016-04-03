@@ -11,6 +11,8 @@ var wait_for_player = {
 		
 		game.stage.disableVisibilityChange = true;
 		
+		//menu_music = game.add.audio('menu_music');
+		
 		game.add.sprite(0, 0, 'waiting_background');
 		
 		//tell the server that the player is ready to play and assign them a player ID
@@ -27,9 +29,9 @@ var wait_for_player = {
 	//if the menu music is not playing, play the song again
 	update: function() {
 		
-		if(!menu_music.isPlaying){
+		/* if(!menu_music.isPlaying){
 			
 			menu_music.play();
-		}
+		} */
 	}
 }

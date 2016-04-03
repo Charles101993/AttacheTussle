@@ -86,7 +86,7 @@ var game_state = {
 		
 		game_music = game.add.audio('game_music');
 
-		game_music.play();
+		game_music.pause();
 		
 		game_music.onLoop.add(function(){    game_music.play();},this);
 	
