@@ -20,7 +20,7 @@ var character_select = {
 		
 		game.load.spritesheet('ready_button', 'assets/ready_button.png', 150, 75);
 		game.load.image('character_select_background', 'assets/character_select_background.png');
-		game.load.spritesheet('sample_character', 'assets/sample_character_sheet.png', 151, 190);
+		game.load.spritesheet('sample_character', 'assets/sample_character_sheet.png', 51.75, 65);
 		game.load.spritesheet('down_arrow', 'assets/down_arrow_button.png', 50, 75);
 		game.load.spritesheet('up_arrow', 'assets/up_arrow_button.png', 50, 75);
 	},
@@ -52,7 +52,7 @@ var character_select = {
 		//if the client is assigned the ID player 1, load that clients assets
 		if(playerID == 'player 1'){
 			
-			player_character = game.add.sprite(140,320, 'sample_character',0);
+			player_character = game.add.sprite(150,350, 'sample_character',0);
 			player_character.anchor.setTo(0.5, 0.5);
 			player_character.animations.add('characters', [0,1,2,3]);
 	
@@ -62,14 +62,14 @@ var character_select = {
 			upButton = this.game.add.button(150, 250, 'up_arrow', this.prevChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
-			opponent_character = game.add.sprite(640,320, 'sample_character',0);
+			opponent_character = game.add.sprite(650,350, 'sample_character',0);
 			opponent_character.anchor.setTo(0.5, 0.5);
 		}
 		
 		//if the client is assigned the ID player 2, load that clients assets
 		else if(playerID == 'player 2'){
 			
-			player_character = game.add.sprite(640,320, 'sample_character',0);
+			player_character = game.add.sprite(650,350, 'sample_character',0);
 			player_character.anchor.setTo(0.5, 0.5);
 			player_character.animations.add('characters', [0,1,2,3]);
 	
@@ -79,7 +79,7 @@ var character_select = {
 			upButton = this.game.add.button(650, 250, 'up_arrow', this.prevChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
-			opponent_character = game.add.sprite(140,320, 'sample_character',0);
+			opponent_character = game.add.sprite(150,350, 'sample_character',0);
 			opponent_character.anchor.setTo(0.5, 0.5);
 		}
 	
