@@ -3,6 +3,7 @@ var boot = {
 	//allows both clients to be updated if you are focused on a different tab or window
 	init: function(){
 		game.stage.disableVisibilityChange = true;
+		game.scale.pageAlignHorizontally = true;
 	},
 	
 	//loads music assets so they can be read in before they are used in later states
