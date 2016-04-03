@@ -5,6 +5,7 @@
 <script type="text/javascript" src="assets/states/character_select.js"></script>
 <script type="text/javascript" src="assets/states/wait_for_player.js"></script>
 <script type="text/javascript" src="assets/states/game_state.js"></script>
+<script type="text/javascript" src="assets/states/game_end_state.js"></script>
 
 
 <html lang="en"> 
@@ -32,7 +33,9 @@ var opponent_char_counter = 0;
 var opponent_ready = false;
 var menu_music;
 var game_music;
-
+var player_rematch = null;
+var opponent_rematch = null;
+			
 socket.on('opponent input', function(input){
 	opponent_packet = input;
 });
@@ -52,6 +55,7 @@ game.state.add('start_menu', start_menu);
 game.state.add('wait_for_player', wait_for_player);
 game.state.add('character_select', character_select);
 game.state.add('game', game_state);
+game.state.add('game_end', game_end_state);
 
 game.state.start('boot');
 

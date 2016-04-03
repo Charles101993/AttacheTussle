@@ -1,7 +1,7 @@
 var character_select = {
 	
 	init: function() {
-		
+		console.log('character select');
 		//game.stage.disableVisibilityChange = true;
 		
 		player_char_counter = 0;
@@ -14,7 +14,6 @@ var character_select = {
 	},
 	
 	preload: function() {
-		
 		game.load.spritesheet('ready_button', 'assets/ready_button.png', 150, 75);
 		game.load.image('character_select_background', 'assets/character_select_background.png');
 		game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
@@ -148,8 +147,7 @@ var character_select = {
 			case 3: opponent_character.frame = 5;
 			   break;
 		}
-		console.log('player: ' + player_ready);
-		console.log('opponent: ' + opponent_ready);
+
 		if(player_ready && opponent_ready){
 			
 			game.state.start('game');

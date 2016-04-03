@@ -171,6 +171,7 @@ var game_state = {
 		
 		if (cursors.left.isDown)
 		{
+			game.state.start('game_end', 0, 0, 'win');
 			left(player.x, player.y);
 			
 			//  Move to the left
