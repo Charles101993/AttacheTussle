@@ -5,8 +5,7 @@ Group Members: Dan Banks, Charles Beehner, Taylor Stephenson, Victor Meniola
 To run the game you must have node.js installed.
 https://nodejs.org/en/
 
-To run:
-
+To run:_
 Log into compute.cse.tamu.edu on putty.
 
 Type "node app.js" into command line.
