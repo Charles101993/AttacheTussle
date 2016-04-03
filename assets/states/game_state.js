@@ -1,10 +1,11 @@
 //world game state
 var game_state = {
 	// param is string denoting whether client is player 1 or 2
-	init: function(param){
+	init: function(){
 		console.log('game_state loaded');		
 		
-		var player, opponent;
+		var player;
+		var opponent;
 		var platforms;
 		var cursors;
 
@@ -12,8 +13,6 @@ var game_state = {
 		var scoreText;
 		
 		frame = false;
-
-		playerID = param;
 		
 		collectStar = function(player, star){
 	
@@ -115,10 +114,10 @@ var game_state = {
 		
 		game.scale.setGameSize(800, 800);
 		
-		menu_music.pause();
+		menu_music.stop();
 		
 		game_music = game.add.audio('game_music');
-		game_music.loop = true;
+		
 		game_music.play();
 	
 		//  We're going to be using physics, so enable the Arcade Physics system
@@ -254,10 +253,10 @@ var game_state = {
 	
 	update: function(){
 		
-		if(!game_music.isPlaying == false){
+		/* if(!game_music.isPlaying == false){
 			
 			game_music.play();
-		}
+		} */
 		
 		// skip every other frame
 		if(!frame) {
