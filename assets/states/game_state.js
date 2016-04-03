@@ -78,6 +78,8 @@ var game_state = {
 	
 	create: function(){
 		
+		game.scale.setGameSize(800, 800);
+		
 		game.stage.disableVisibilityChange = true;
 		
 		menu_music.destroy();
