@@ -20,7 +20,7 @@ var character_select = {
 		
 		game.load.spritesheet('ready_button', 'assets/ready_button.png', 150, 75);
 		game.load.image('character_select_background', 'assets/character_select_background.png');
-		game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+		game.load.spritesheet('sample_character', 'assets/sample_character_sheet.png', 151, 190);
 		game.load.spritesheet('down_arrow', 'assets/down_arrow_button.png', 50, 75);
 		game.load.spritesheet('up_arrow', 'assets/up_arrow_button.png', 50, 75);
 	},
@@ -52,8 +52,9 @@ var character_select = {
 		//if the client is assigned the ID player 1, load that clients assets
 		if(playerID == 'player 1'){
 			
-			player_character = game.add.sprite(140,320, 'dude',0);
-			player_character.animations.add('characters', [0,1,2,3,4,5]);
+			player_character = game.add.sprite(140,320, 'sample_character',0);
+			player_character.anchor.setTo(0.5, 0.5);
+			player_character.animations.add('characters', [0,1,2,3]);
 	
 			downButton = this.game.add.button(150, 450, 'down_arrow', this.nextChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
@@ -61,14 +62,16 @@ var character_select = {
 			upButton = this.game.add.button(150, 250, 'up_arrow', this.prevChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
-			opponent_character = game.add.sprite(640,320, 'dude',0);
+			opponent_character = game.add.sprite(640,320, 'sample_character',0);
+			opponent_character.anchor.setTo(0.5, 0.5);
 		}
 		
 		//if the client is assigned the ID player 2, load that clients assets
 		else if(playerID == 'player 2'){
 			
-			player_character = game.add.sprite(640,320, 'dude',0);
-			player_character.animations.add('characters', [0,1,2,3,4,5]);
+			player_character = game.add.sprite(640,320, 'sample_character',0);
+			player_character.anchor.setTo(0.5, 0.5);
+			player_character.animations.add('characters', [0,1,2,3]);
 	
 			downButton = this.game.add.button(650, 450, 'down_arrow', this.nextChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
@@ -76,7 +79,8 @@ var character_select = {
 			upButton = this.game.add.button(650, 250, 'up_arrow', this.prevChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
-			opponent_character = game.add.sprite(140,320, 'dude',0);
+			opponent_character = game.add.sprite(140,320, 'sample_character',0);
+			opponent_character.anchor.setTo(0.5, 0.5);
 		}
 	
 	},
@@ -103,9 +107,9 @@ var character_select = {
 			   break;
 			case 1: player_character.frame = 1;
 			   break;
-			case 2: player_character.frame = 4;
+			case 2: player_character.frame = 2;
 			   break;
-			case 3: player_character.frame = 5;
+			case 3: player_character.frame = 3;
 			   break;
 		}
 		
@@ -135,9 +139,9 @@ var character_select = {
 			   break;
 			case 1: player_character.frame = 1;
 			   break;
-			case 2: player_character.frame = 4;
+			case 2: player_character.frame = 2;
 			   break;
-			case 3: player_character.frame = 5;
+			case 3: player_character.frame = 3;
 			   break;
 		}
 		
@@ -181,9 +185,9 @@ var character_select = {
 			   break;
 			case 1: opponent_character.frame = 1;
 			   break;
-			case 2: opponent_character.frame = 4;
+			case 2: opponent_character.frame = 2;
 			   break;
-			case 3: opponent_character.frame = 5;
+			case 3: opponent_character.frame = 3;
 			   break;
 		}
 
