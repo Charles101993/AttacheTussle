@@ -28,11 +28,16 @@ var character_select = {
 	//create the screen that is sent to both clients
 	create: function() {
 		
-		menu_music = game.add.audio('menu_music');
+		//menu_music = game.add.audio('menu_music');
 		
-		if(music_start == true){
+		if(menu_music == null){
 			
-			music_start = false;
+			menu_music = game.add.audio('menu_music');
+			this.menuMusic.loop = true;
+			menu_music.play();
+		}
+		else if(menu_music.isPlaying == false){
+			
 			menu_music.play();
 		}
 		
@@ -156,7 +161,10 @@ var character_select = {
 	//if the menu music is not playing, play the song again
 	update: function() {
 		
-		//menu_music.resume();
+		/* if(!menu_music.isPlaying){
+			
+			menu_music.resume();
+		} */
 		
 		//if the opponent has chosen their character and the player is on the same character,
 		//change players character so that the same character can't be picked

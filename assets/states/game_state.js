@@ -112,6 +112,14 @@ var game_state = {
 	create: function(){
 		
 		game.stage.disableVisibilityChange = true;
+		
+		game.scale.setGameSize(800, 800);
+		
+		menu_music.pause();
+		
+		game_music = game.add.audio('game_music');
+		game_music.loop = true;
+		game_music.play();
 	
 		//  We're going to be using physics, so enable the Arcade Physics system
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -245,6 +253,12 @@ var game_state = {
 	},
 	
 	update: function(){
+		
+		if(!game_music.isPlaying == false){
+			
+			game_music.play();
+		}
+		
 		// skip every other frame
 		if(!frame) {
 			frame = true;
