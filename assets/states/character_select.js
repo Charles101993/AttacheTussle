@@ -176,6 +176,9 @@ var character_select = {
 
 		if(player_ready && opponent_ready){
 			
+			player_ready = false;
+			opponent_ready = false;
+			
 			game.state.start('game');
 		}
 	}
