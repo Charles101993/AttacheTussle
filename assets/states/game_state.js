@@ -118,6 +118,14 @@ var game_state = {
 	
 	create: function(){
 		
+		socket.on('purse swap', purse_swap_func = function(input){
+			opponent_swap = input;
+		});
+
+		socket.on('opponent input', opponent_input_func = function(input){
+			opponent_packet = input;
+		});
+		
 		game.stage.disableVisibilityChange = true;
 		
 		game.scale.setGameSize(800, 800);
@@ -261,6 +269,8 @@ var game_state = {
 				
 				if(opponent_score == 10){
 					socket.emit('game end', playerID);
+					socket.removeListener('purse swap', purse_swap_func);
+					socket.removeListener('opponent input', opponent_input_func);
 					game.state.start('game_end', false, true, 'lose', player_score, opponent_score);
 				}
 			}
@@ -270,6 +280,8 @@ var game_state = {
 				
 				if(player_score == 10){
 					socket.emit('game end', playerID);
+					socket.removeListener('purse swap', purse_swap_func);
+					socket.removeListener('opponent input', opponent_input_func);
 					game.state.start('game_end', false, true, 'win', player_score, opponent_score);
 				}
 			}

@@ -28,6 +28,43 @@ var character_select = {
 	//create the screen that is sent to both clients
 	create: function() {
 		
+		socket.on('opponent character', opponent_char_func = function(input){
+			opponent_char_counter = input;
+		});
+		
+		socket.once('opponent ready', function(input){
+			opponent_ready = input;
+			
+			if(opponent_char_counter == player_char_counter){				
+				player_char_counter++;		
+		
+				//if the opponent has chosen their character, prevent player from choosing the same character
+				if(opponent_ready){
+					
+					if(opponent_char_counter == player_char_counter){				
+						player_char_counter++;
+					}
+				}
+				
+				//choose which sprite to display
+				
+				if(player_char_counter > 3) player_char_counter = 0;
+				console.log(player_char_counter);
+				switch(player_char_counter){
+					case 0: player_character.frame = 0;
+					   break;
+					case 1: player_character.frame = 1;
+					   break;
+					case 2: player_character.frame = 2;
+					   break;
+					case 3: player_character.frame = 3;
+					   break;
+				}
+				
+				socket.emit('player character',player_char_counter);
+			}
+		});
+		
 		//menu_music = game.add.audio('menu_music');
 		
 		if(menu_music == null){
@@ -73,10 +110,10 @@ var character_select = {
 			player_character.anchor.setTo(0.5, 0.5);
 			player_character.animations.add('characters', [0,1,2,3]);
 	
-			downButton = this.game.add.button(650, 450, 'down_arrow', this.nextChar, this, 1, 0, 2);
+			downButton = this.game.add.button(650, 450, 'down_arrow', this.prevChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
 		
-			upButton = this.game.add.button(650, 250, 'up_arrow', this.prevChar, this, 1, 0, 2);
+			upButton = this.game.add.button(650, 250, 'up_arrow', this.nextChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
 			opponent_character = game.add.sprite(150,350, 'sample_character',0);
@@ -86,7 +123,7 @@ var character_select = {
 	},
 	
 	//called when the down button is pressed
-	nextChar: function(){
+	prevChar: function(){
 	
 		player_char_counter--;
 		
@@ -99,9 +136,9 @@ var character_select = {
 		}
 		
 		//choose which sprite to display
-		console.log(player_char_counter);
-		if(player_char_counter < 0) player_char_counter = 3;
 		
+		if(player_char_counter < 0) player_char_counter = 3;
+		console.log(player_char_counter);
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
 			   break;
@@ -117,7 +154,7 @@ var character_select = {
 	},
 	
 	//called when the up button is pressed
-	prevChar: function(){
+	nextChar: function(){
 	
 		player_char_counter++;
 		
@@ -131,9 +168,9 @@ var character_select = {
 		}
 		
 		//choose which sprite to display
-		console.log(player_char_counter);
-		if(player_char_counter > 3) player_char_counter = 0;
 		
+		if(player_char_counter > 3) player_char_counter = 0;
+		console.log(player_char_counter);
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
 			   break;
@@ -172,12 +209,6 @@ var character_select = {
 		
 		//if the opponent has chosen their character and the player is on the same character,
 		//change players character so that the same character can't be picked
-		if(opponent_ready){
-			
-			if(opponent_char_counter == player_char_counter){				
-				this.prevChar();
-			}
-		}
 		
 		//used to show players their opponents character
 		switch(opponent_char_counter){
@@ -195,6 +226,8 @@ var character_select = {
 			
 			player_ready = false;
 			opponent_ready = false;
+			
+			socket.removeListener('opponent character', opponent_char_func);
 			
 			game.state.start('game');
 		}
