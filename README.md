@@ -2,6 +2,7 @@
 
 Group Members: Dan Banks, Charles Beehner, Taylor Stephenson, Victor Meniola
 
+You must be on the tamu server when you run the game on compute.  
 To run the game you must have node.js installed.  
 https://nodejs.org/en/
 
