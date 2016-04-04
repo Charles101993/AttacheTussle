@@ -74,10 +74,7 @@ var game_state = {
 			socket.emit('input', client_packet);
 		}
 		emit_purse_swap = function(){	
-			var client_packet = { 
-			   input: 'swap'
-			}
-			socket.emit('input', client_packet);
+			socket.emit('purse swap', playerID);
 		}
 		emit_taunt = function(){	
 			var client_packet = { 
@@ -85,20 +82,25 @@ var game_state = {
 			}
 			socket.emit('input', client_packet);
 		}
-		emit_ass_l = function(){
+		emit_ass_l = function(x, y){
 			var client_packet = {
-			   input: 'ass_l'
+			   input: 'ass_l',
+			   x: x,
+			   y: y
 			}
 			socket.emit('input', client_packet);
 		}
-		emit_ass_r = function(){	
+		emit_ass_r = function(x, y){	
 			var client_packet = { 
-			   input: 'ass_r'
+			   input: 'ass_r',
+			   x: x,
+			   y: y
 			}
 			socket.emit('input', client_packet);
 		}
 		
 		
+
 		can_move = true;
 		dash_count = 0;
 
@@ -276,11 +278,13 @@ var game_state = {
 		stop_taunt = function(){
 			can_move = true;
 		}
+	
 
-
+		
 		player.purse = false;
 		opponent.purse = false;
 		player.dash = true;
+
 		
 	},
 	
@@ -317,8 +321,8 @@ var game_state = {
 			if(s_key.isDown && player.purse == true){
 				player.animations.stop();
 				can_move = false;
+				emit_taunt();
 				start_taunt_1(player);
-				emit_taunt();			
 			}
 			else if(a_key.isDown && player.dash == true){
 				l_dash();
@@ -331,18 +335,18 @@ var game_state = {
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
-				emit_ass_l();
+				emit_ass_l(player.x, player.y);
 				player.body.velocity.x = -75;
 				player.frame = 11;
 				
 			}
 			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
-				emit_ass_r();
+				emit_ass_r(player.x, player.y);
 				player.body.velocity.x = 75;
 				player.frame = 10;
 				
 			}
-			else if (s_key.isDown && !player_collide && !player.purse){
+			else if (s_key.isDown && player_collide == false && player.purse == false){
 				player.frame = 10;
 			}
 			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
@@ -388,16 +392,29 @@ var game_state = {
 		//opponent.body.velocity.x = 0;	
 		
 		// sync opponent position
+
+
 		if(opponent_packet.x != null && opponent_packet.y != null){
 			if(opponent_packet.y > game.world.height - 113) opponent_packet.y = game.world.height - 112;
 			
 			opponent.x=opponent_packet.x;
 			opponent.y=opponent_packet.y;
 		}
+
+		if (opponent_swap)
+		{
+			opponent_swap = false;
+			can_move = false;
+			player.purse = false;
+			opponent.purse = true;
+			player.loadTexture('dude_no_purse', 0, false);
+			opponent.loadTexture('dude', 0, false);
+			game.time.events.add(Phaser.Timer.SECOND * 2, stop_taunt, this);
+		}
+
 		
 		//  Collide the opponent with the platforms
 		game.physics.arcade.collide(opponent, platforms);		
-		
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
@@ -411,15 +428,6 @@ var game_state = {
 			opponent.body.velocity.x = 150;
 
 			opponent.animations.play('right');
-		}
-		else if (opponent_packet.input == 'swap')
-		{
-			can_move = false;
-			player.purse = false;
-			opponent.purse = true;
-			player.loadTexture('dude_no_purse', 0, false);
-			opponent.loadTexture('dude', 0, false);
-			game.time.events.add(Phaser.Timer.SECOND * 1, stop_taunt, this);
 		}
 		else if (opponent_packet.input == 'taunt')
 		{
@@ -449,6 +457,14 @@ var game_state = {
 			opponent.body.velocity.x = -75;
 			opponent.frame = 11;
 		}
+		else if (opponent_packet.input == 'up' && opponent.body.touching.down)
+		{
+			opponent.body.velocity.y = -460;
+		}
+		else if (opponent_packet.input == true && player.purse == true)
+		{
+			player.purse = false;
+		}
 		else
 		{
 			//  Stand still
@@ -456,16 +472,12 @@ var game_state = {
 			opponent.body.velocity.x = 0;
 			//opponent.frame = 4;
 		}
-		
+	
 		//  Allow the opponent to jump if they are touching the ground.
-		if (opponent_packet.input == 'up' && opponent.body.touching.down)
-		{
-			opponent.body.velocity.y = -460;
-		}
 
 		// reset opponent input
 		if(dash_count >= 4){
-			opponent_packet.input = '';
+			opponent_packet.input = null;
 		}
 		dash_count += 1;
 

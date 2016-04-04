@@ -37,7 +37,12 @@ var game_music;
 var player_rematch = null;
 var opponent_rematch = null;
 var music_start = false;
+var opponent_swap = false;
 			
+socket.on('purse swap', function(input){
+	opponent_swap = input;
+});
+
 socket.on('opponent input', function(input){
 	opponent_packet = input;
 });
