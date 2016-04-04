@@ -133,7 +133,7 @@ var game_state = {
 
 		//  A simple background for our game
 		game.add.sprite(0, 0, 'sky');
-		purse = game.add.sprite(300, game.world.height - 500, 'purse');
+		purse = game.add.sprite(380, game.world.height - 750, 'purse');
 
 		//  The platforms group contains the ground and the 2 ledges we can jump on
 		platforms = game.add.group();
@@ -167,26 +167,26 @@ var game_state = {
 
 		ledge = platforms.create(65, 704, 'ground');
 		ledge.body.immovable = true;
-		ledge.scale.setTo(1.55, 1.4);
+		ledge.scale.setTo(1.52, 1.4);
 		
 		// The player and its settings
 		if(playerID == 'player 1'){
-			player = game.add.sprite(32, game.world.height - 150, 'dude_no_purse');
-			opponent = game.add.sprite(736, game.world.height - 150, 'dude_no_purse');
+			player = game.add.sprite(5, game.world.height - 150, 'dude_no_purse');
+			opponent = game.add.sprite(750, game.world.height - 150, 'dude_no_purse');
 			
 			//  player score
-			player_score_text = game.add.text(100, 700, String(player_score), { fontSize: '32px', fill: '#000' });
+			player_score_text = game.add.text(50, 750, String(player_score), { fontSize: '32px', fill: '#000' });
 			//  opponent score
-			opponent_score_text = game.add.text(700, 700, String(opponent_score), { fontSize: '32px', fill: '#000' });
+			opponent_score_text = game.add.text(750, 750, String(opponent_score), { fontSize: '32px', fill: '#000' });
 		}
 		else if(playerID == 'player 2'){
 			opponent = game.add.sprite(32, game.world.height - 150, 'dude_no_purse');
 			player = game.add.sprite(736, game.world.height - 150, 'dude_no_purse');
 			
 			//  player score
-			player_score_text = game.add.text(700, 700, String(player_score), { fontSize: '32px', fill: '#000' });
+			player_score_text = game.add.text(750, 750, String(player_score), { fontSize: '32px', fill: '#000' });
 			//  opponent score
-			opponent_score_text = game.add.text(100,700, String(opponent_score), { fontSize: '32px', fill: '#000' });
+			opponent_score_text = game.add.text(50,750, String(opponent_score), { fontSize: '32px', fill: '#000' });
 
 		}
 		
