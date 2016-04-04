@@ -9,7 +9,6 @@
 
 
 <html lang="en"> 
-<body bgcolor = "#000000">
 <head> 
     <meta charset="UTF-8" />
     <title>Phaser</title>
@@ -19,8 +18,7 @@
         }
     </style>
 </head>
-<body>
-
+<body bgcolor = "#000000">
 <script type="text/javascript">
 var socket = io();
 	
@@ -69,7 +67,16 @@ game.state.add('game_end', game_end_state);
 game.state.start('boot');
 
 </script>
-
-<body>
+<style>
+div.absolute {
+    position: absolute;
+    bottom: 70px;
+    left: 175px;
+} 
+</style>
+<div class = "absolute">
+<img src= "assets/arrow_controls.png"/>
+<img src= "assets/letter-controls.png"/>
+</div>
 </body>
 </html>
