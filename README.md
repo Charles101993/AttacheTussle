@@ -11,3 +11,7 @@ Log into *compute.cse.tamu.edu* on putty.
 Type *node app.js* into command line.  
 The server will start.  
 On google chrome, go to *compute-linux1.cs.tamu.edu:10000* to start the game.
+
+**To test:**  
+If testing on the same computer run the game in two separate windows.  
+We are still working on fixing a couple of bugs, if they occur refresh the page.
