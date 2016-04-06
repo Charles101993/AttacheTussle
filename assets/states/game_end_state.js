@@ -3,6 +3,9 @@ var game_end_state = {
 	init: function(param1,param2,param3){
 		game.stage.disableVisiblityChange = true;
 		
+		opponent_rematch = null;
+		player_rematch = null;
+		
 		result = param1;
 		player_score = param2;
 		opponent_score = param3;
@@ -23,8 +26,6 @@ var game_end_state = {
 			
 			socket.emit('game end choice', 'rematch');
 			if(opponent_rematch == true){
-				opponent_rematch = null;
-				player_rematch = null;
 				music_start = true;
 				game.state.start('character_select');
 			}
@@ -64,14 +65,10 @@ var game_end_state = {
 	
 	update: function(){
 		if(opponent_rematch == false){
-			opponent_rematch = null;
-			player_rematch = null;
 			socket.emit('game end choice', 'main menu');
 			game.state.start('start_menu');
 		}
 		else if( (player_rematch == true) && (opponent_rematch == true) ){
-			opponent_rematch = null;
-			player_rematch = null;
 			music_start = true;
 			game.state.start('character_select');
 		}

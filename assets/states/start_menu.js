@@ -33,7 +33,6 @@ var start_menu = {
 	//when the play button is clicked this function is called
 	//the next state will be called and sent to both clients
 	playGame: function() {
-		
 		game.state.start('wait_for_player');
 	},
 	
