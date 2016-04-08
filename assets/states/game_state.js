@@ -99,7 +99,8 @@ var game_state = {
 			socket.emit('input', client_packet);
 		}
 		
-		
+		player_fall_through = false;
+		opponent_fall_through = false;
 
 		can_move = true;
 		dash_count = 0;
@@ -312,8 +313,20 @@ var game_state = {
 			frame = true;
 			return;
 		}
-		game.physics.arcade.collide(player, platforms);
+		
 		game.physics.arcade.collide(purse, platforms);
+		
+		// player fall through platform?
+		if(!game.physics.arcade.overlap(player, platforms, null, null, this)){
+			player_fall_through = false;
+		}
+		if(!player_fall_through){
+			game.physics.arcade.collide(player, platforms);
+		}
+		else{
+			game.physics.arcade.collide(player, platforms.children[0]);
+		}
+		
 		player.body.velocity.x = 0;
 		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
 		purse_collide = game.physics.arcade.overlap(player, purse, null, null, this);
@@ -387,15 +400,22 @@ var game_state = {
 
 				player.animations.play('right');
 			}
-			else if (cursors.up.isDown && player.body.touching.down)
-			{
-				up(player.x, player.y);
-				player.body.velocity.y = -460;
-			}
 			else
 			{
 				player.animations.stop();
 			}
+			
+			if (cursors.up.isDown && player.body.touching.down)
+			{
+				up(player.x, player.y);
+				player.body.velocity.y = -460;
+			}
+			else if (cursors.down.isDown && player.body.touching.down)
+			{
+				down(player.x,player.y);
+				player_fall_through = true;
+			}
+			
 		}
 
 
@@ -404,7 +424,17 @@ var game_state = {
 		//opponent.body.velocity.x = 0;	
 		
 		// sync opponent position
-
+		
+		// opponent fall through platform?
+		if(!game.physics.arcade.overlap(opponent, platforms, null, null, this)){
+			opponent_fall_through = false;
+		}
+		if(!opponent_fall_through){
+			game.physics.arcade.collide(opponent, platforms);
+		}
+		else{
+			game.physics.arcade.collide(opponent, platforms.children[0]);
+		}		
 
 		if(opponent_packet.x != null && opponent_packet.y != null){
 			if(opponent_packet.y > game.world.height - 113) opponent_packet.y = game.world.height - 112;
@@ -424,9 +454,6 @@ var game_state = {
 			game.time.events.add(Phaser.Timer.SECOND * 2, stop_taunt, this);
 		}
 
-		
-		//  Collide the opponent with the platforms
-		game.physics.arcade.collide(opponent, platforms);		
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
@@ -469,10 +496,6 @@ var game_state = {
 			opponent.body.velocity.x = -75;
 			opponent.frame = 11;
 		}
-		else if (opponent_packet.input == 'up' && opponent.body.touching.down)
-		{
-			opponent.body.velocity.y = -460;
-		}
 		else if (opponent_packet.input == true && player.purse == true)
 		{
 			player.purse = false;
@@ -483,6 +506,15 @@ var game_state = {
 			opponent.animations.stop();
 			opponent.body.velocity.x = 0;
 			//opponent.frame = 4;
+		}
+		
+		if (opponent_packet.input == 'up' && opponent.body.touching.down)
+		{
+			opponent.body.velocity.y = -460;
+		}
+		else if (opponent_packet.input == 'down' && opponent.body.touching.down)
+		{
+			opponent_fall_through = true;
 		}
 	
 		//  Allow the opponent to jump if they are touching the ground.
@@ -495,6 +527,8 @@ var game_state = {
 
 		opponent_packet.x = null;
 		opponent_packet.y = null;
+		
+		frame = false;
 
 	},
 
