@@ -1,4 +1,4 @@
-# 315-game-SweatBoys-D3
+# 315-game-SweatBoys
 
 Group Members: Dan Banks, Charles Beehner, Taylor Stephenson, Victor Meniola
 
