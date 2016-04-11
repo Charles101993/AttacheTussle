@@ -204,6 +204,8 @@ var game_state = {
 		game.physics.arcade.enable(opponent);
 		game.physics.arcade.enable(purse);
 		
+		game.physics.arcade.OVERLAP_BIAS = 6;
+		
 		//  Our controls.
 		cursors = game.input.keyboard.createCursorKeys();
 		
@@ -403,6 +405,14 @@ var game_state = {
 			else
 			{
 				player.animations.stop();
+				
+				var client_packet = {
+					input: null,
+					x: player.x,
+					y: player.y
+				}
+				
+				socket.emit('input',client_packet);
 			}
 			
 			if (cursors.up.isDown && player.body.touching.down)
@@ -420,10 +430,26 @@ var game_state = {
 
 
 		//  opponent ------------------------------------------------------------------------------------------------		
+		
 		//  Reset the opponent's velocity (movement)
-		//opponent.body.velocity.x = 0;	
+		opponent.body.velocity.x = 0;	
 		
 		// sync opponent position
+		if(opponent_packet.x != null && opponent_packet.y != null){
+			if(opponent_packet.y > game.world.height - 113) opponent_packet.y = game.world.height - 112;
+			
+			if( (opponent_packet.y - opponent.y) < 10 || (opponent_packet.y - opponent.y) > -10 ){
+				opponent.y =(opponent.y + opponent_packet.y)/2;
+			}
+			else
+				opponent.y = opponent_packet.y;
+			
+			if( (opponent_packet.x - opponent.x) < 10 || (opponent_packet.x - opponent.x) > -10 ){
+				opponent.x = (opponent.x + opponent_packet.x)/2;
+			}
+			else
+				opponent.x = opponent_packet.x;
+		}
 		
 		// opponent fall through platform?
 		if(!game.physics.arcade.overlap(opponent, platforms, null, null, this)){
@@ -434,13 +460,6 @@ var game_state = {
 		}
 		else{
 			game.physics.arcade.collide(opponent, platforms.children[0]);
-		}		
-
-		if(opponent_packet.x != null && opponent_packet.y != null){
-			if(opponent_packet.y > game.world.height - 113) opponent_packet.y = game.world.height - 112;
-			
-			opponent.x=opponent_packet.x;
-			opponent.y=opponent_packet.y;
 		}
 
 		if (opponent_swap)
@@ -504,7 +523,6 @@ var game_state = {
 		{
 			//  Stand still
 			opponent.animations.stop();
-			opponent.body.velocity.x = 0;
 			//opponent.frame = 4;
 		}
 		
