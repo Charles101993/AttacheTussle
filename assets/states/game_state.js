@@ -370,6 +370,7 @@ var game_state = {
 				player.frame = 10;
 			}
 			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
+				butt_bump_sound.play();
 				crowd_gasp.play();
 				emit_purse_swap();
 				player.frame = 11;
