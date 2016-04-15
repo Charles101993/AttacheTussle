@@ -18,9 +18,10 @@ var start_menu = {
 		//set loop to true so that the audio file will start over if the song ends
 
 		menu_music = game.add.audio('menu_music');
+		camera_shutter = game.add.audio('camera_shutter');
 		
 		menu_music.loop = true;
-		menu_music.play();
+		menu_music.play('', 0, 1);
 		
 		//add the play button to the game
 		//the 0, 1, and 2 are used to diplay a particular section of the sprite sheet so that the
@@ -33,6 +34,8 @@ var start_menu = {
 	//when the play button is clicked this function is called
 	//the next state will be called and sent to both clients
 	playGame: function() {
+		
+		camera_shutter.play();
 		game.state.start('wait_for_player');
 	},
 	

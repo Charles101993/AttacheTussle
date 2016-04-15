@@ -188,6 +188,8 @@ var character_select = {
 	//called when the player presses the ready button
 	playerReady: function() {
 		
+		camera_shutter.play();
+		
 		//destory buttons so they can't change their character once ready
 		readyButton.destroy();
 		upButton.destroy();

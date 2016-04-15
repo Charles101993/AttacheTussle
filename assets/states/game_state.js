@@ -118,6 +118,11 @@ var game_state = {
 	
 	create: function(){
 		
+		butt_bump_sound = game.add.audio('butt_bump_sound');
+		crowd_gasp = game.add.audio('crowd_gasp');
+		oh_yeah = game.add.audio('oh_yeah');
+		whoosh = game.add.audio('whoosh');
+		
 		socket.on('purse swap', purse_swap_func = function(input){
 			opponent_swap = input;
 		});
@@ -134,7 +139,7 @@ var game_state = {
 		
 		game_music = game.add.audio('game_music');
 		
-		game_music.play();
+		game_music.play('', 0, .1);
 	
 		//  We're going to be using physics, so enable the Arcade Physics system
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -331,17 +336,20 @@ var game_state = {
 		}
 		if(can_move == true){
 			if(s_key.isDown && player.purse == true){
+				oh_yeah.play();
 				player.animations.stop();
 				can_move = false;
 				emit_taunt();
 				start_taunt_1(player);
 			}
 			else if(a_key.isDown && player.dash == true){
+				whoosh.play();
 				l_dash();
 				player.body.velocity.x = -400;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if(d_key.isDown && player.dash == true){
+				whoosh.play();
 				r_dash();
 				player.body.velocity.x = 400;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
@@ -362,6 +370,7 @@ var game_state = {
 				player.frame = 10;
 			}
 			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
+				crowd_gasp.play();
 				emit_purse_swap();
 				player.frame = 11;
 				player.purse = true;
