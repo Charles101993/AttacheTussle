@@ -9,6 +9,8 @@ var game_state = {
 		var platforms;
 		var cursors;
 
+		packet_queue = [];
+		
 		player_score = 0;
 		opponent_score = 0;
 		var player_score_text;
@@ -99,7 +101,8 @@ var game_state = {
 			socket.emit('input', client_packet);
 		}
 		
-		
+		player_fall_through = false;
+		opponent_fall_through = false;
 
 		can_move = true;
 		dash_count = 0;
@@ -128,7 +131,7 @@ var game_state = {
 		});
 
 		socket.on('opponent input', opponent_input_func = function(input){
-			opponent_packet = input;
+			/* if(packet_queue.length<10) */ packet_queue.push(input);
 		});
 		
 		game.stage.disableVisibilityChange = true;
@@ -242,6 +245,8 @@ var game_state = {
 		game.physics.arcade.enable(opponent);
 		game.physics.arcade.enable(purse);
 		
+		game.physics.arcade.OVERLAP_BIAS = 9;
+		
 		//  Our controls.
 		cursors = game.input.keyboard.createCursorKeys();
 		
@@ -347,25 +352,15 @@ var game_state = {
 	
 	update: function(){
 
-		
-		/* if(!game_music.isPlaying == false){
-			
-			game_music.play();
-		} */
-		
-		// skip every other frame
-		if(!frame) {
-			frame = true;
-			return;
-		}
 		if(player.body.velocity.y >= 0){
 			game.physics.arcade.collide(player, platforms);
 		}
 		game.physics.arcade.collide(purse, platforms);
-		player.body.velocity.x = 0;
-		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
+		
 		purse_collide = game.physics.arcade.overlap(player, purse, null, null, this);
 		opponent_collide = game.physics.arcade.overlap(purse, opponent, null, null, this);
+		
+		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
 		
 		if(purse_collide){
 			purse.destroy();
@@ -377,94 +372,32 @@ var game_state = {
 			opponent.purse = true;
 			opponent.loadTexture('dude',0,true);
 		}
-		if(can_move == true){
-			if(s_key.isDown && player.purse == true && player.taunt == true){
-				oh_yeah.play();
-				player.animations.stop();
-				can_move = false;
-				emit_taunt();
-				start_taunt_1(player);
+		
+		if(packet_queue.length > 0) opponent_packet = packet_queue.shift();
+		
+		// sync opponent position if significant discrepency
+		if(opponent_packet.x != null){			
+			if( (opponent_packet.x - opponent.x) > 10 || (opponent_packet.x - opponent.x) < -10 ){
+				opponent.x = opponent_packet.x;
 			}
-			else if(a_key.isDown && player.dash == true){
-				whoosh.play();
-				l_dash();
-				player.body.velocity.x = -400;
-				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
-			}
-			else if(d_key.isDown && player.dash == true){
-				whoosh.play();
-				r_dash();
-				player.body.velocity.x = 400;
-				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
-			}
-			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
-				emit_ass_l(player.x, player.y);
-				player.body.velocity.x = -75;
-				player.frame = 11;
-				
-			}
-			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
-				emit_ass_r(player.x, player.y);
-				player.body.velocity.x = 75;
-				player.frame = 10;
-				
-			}
-			else if (s_key.isDown && player_collide == false && player.purse == false){
-				player.frame = 10;
-			}
-			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
-				butt_bump_sound.play();
-				crowd_gasp.play();
-				pause_taunt();
-				emit_purse_swap();
-				player.frame = 11;
-				player.purse = true;
-				opponent.purse = false;
-				player.loadTexture('dude', 0, false);
-				opponent.loadTexture('dude_no_purse', 0, false);
-			}
-			else if (cursors.left.isDown)
-			{
-				left(player.x, player.y);
-				
-				//  Move to the left
-				player.body.velocity.x = -150;
-
-				player.animations.play('left');
-			}
-			else if (cursors.right.isDown)
-			{
-				right(player.x, player.y);
-				
-				//  Move to the right
-				player.body.velocity.x = 150;
-
-				player.animations.play('right');
-			}
-			else if (cursors.up.isDown && player.body.touching.down)
-			{
-				up(player.x, player.y);
-				player.body.velocity.y = -460;
-			}
-			else
-			{
-				player.animations.stop();
+			/* else
+				opponent.x += (opponent_packet.x - opponent.x)*0.2; */
+		}
+		if(opponent_packet.y != null){
+			if( (opponent_packet.y - opponent.y) > 10 || (opponent_packet.y - opponent.y) < -10 && opponent.body.onFloor() ){
+				opponent.y = opponent_packet.y - 3;
 			}
 		}
-
-
-		//  opponent ------------------------------------------------------------------------------------------------		
-		//  Reset the opponent's velocity (movement)
-		//opponent.body.velocity.x = 0;	
 		
-		// sync opponent position
-
-
-		if(opponent_packet.x != null && opponent_packet.y != null){
-			if(opponent_packet.y > game.world.height - 113) opponent_packet.y = game.world.height - 112;
-			
-			opponent.x=opponent_packet.x;
-			opponent.y=opponent_packet.y;
+		// opponent fall through platform?
+		if(!game.physics.arcade.overlap(opponent, platforms, null, null, this)){
+			opponent_fall_through = false;
+		}
+		if(!opponent_fall_through){
+			game.physics.arcade.collide(opponent, platforms);
+		}
+		else{
+			game.physics.arcade.collide(opponent, platforms.children[0]);
 		}
 
 		if (opponent_swap)
@@ -478,9 +411,6 @@ var game_state = {
 			game.time.events.add(Phaser.Timer.SECOND * 2, stop_taunt, this);
 		}
 
-		
-		//  Collide the opponent with the platforms
-		game.physics.arcade.collide(opponent, platforms);		
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
@@ -523,10 +453,6 @@ var game_state = {
 			opponent.body.velocity.x = -75;
 			opponent.frame = 11;
 		}
-		else if (opponent_packet.input == 'up' && opponent.body.touching.down)
-		{
-			opponent.body.velocity.y = -460;
-		}
 		else if (opponent_packet.input == true && player.purse == true)
 		{
 			player.purse = false;
@@ -535,8 +461,18 @@ var game_state = {
 		{
 			//  Stand still
 			opponent.animations.stop();
+			//  Reset the opponent's velocity (movement)
 			opponent.body.velocity.x = 0;
 			//opponent.frame = 4;
+		}
+		
+		if (opponent_packet.input == 'up' && opponent.body.touching.down)
+		{
+			opponent.body.velocity.y = -460;
+		}
+		else if (opponent_packet.input == 'down' && opponent.body.touching.down)
+		{
+			opponent_fall_through = true;
 		}
 	
 		//  Allow the opponent to jump if they are touching the ground.
@@ -549,7 +485,119 @@ var game_state = {
 
 		opponent_packet.x = null;
 		opponent_packet.y = null;
+		
+		// skip client processing every other frame
+		if(!frame) {
+			frame = true;
+			return;
+		}
+		//  player ------------------------------------------------------------------------------------------------			
+		
+		// player fall through platform?
+		if(!game.physics.arcade.overlap(player, platforms, null, null, this)){
+			player_fall_through = false;
+		}
+		if(!player_fall_through){
+			game.physics.arcade.collide(player, platforms);
+		}
+		else{
+			game.physics.arcade.collide(player, platforms.children[0]);
+		}
+		
+		player.body.velocity.x = 0;
 
-	},
+		if(can_move == true){
+			if(s_key.isDown && player.purse == true && player.taunt == true){
+				oh_yeah.play();
+				player.animations.stop();
+				can_move = false;
+				emit_taunt();
+				start_taunt_1(player);
+			}
+			else if(a_key.isDown && player.dash == true){
+				whoosh.play();
+				l_dash();
+				player.body.velocity.x = -400;
+				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
+			}
+			else if(d_key.isDown && player.dash == true){
+				whoosh.play();
+				r_dash();
+				player.body.velocity.x = 400;
+				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
+			}
+			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
+				emit_ass_l(player.x + player.body.velocity.x/30, player.y);
+				player.body.velocity.x = -75;
+				player.frame = 11;
+				
+			}
+			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
+				emit_ass_r(player.x + player.body.velocity.x/30, player.y);
+				player.body.velocity.x = 75;
+				player.frame = 10;
+				
+			}
+			else if (s_key.isDown && player_collide == false && player.purse == false){
+				player.frame = 10;
+			}
+			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
+				butt_bump_sound.play();
+				crowd_gasp.play();
+				pause_taunt();
+				emit_purse_swap();
+				player.frame = 11;
+				player.purse = true;
+				opponent.purse = false;
+				player.loadTexture('dude', 0, false);
+				opponent.loadTexture('dude_no_purse', 0, false);	
+			}
+			else if (cursors.left.isDown)
+			{			
+				//  Move to the left
+				player.body.velocity.x = -150;
+
+				player.animations.play('left');
+				
+				left(player.x + player.body.velocity.x/30, player.y);
+			}
+			else if (cursors.right.isDown)
+			{		
+				//  Move to the right
+				player.body.velocity.x = 150;
+
+				player.animations.play('right');
+				
+				right(player.x + player.body.velocity.x/30, player.y);
+			}
+			else
+			{
+				player.animations.stop();
+				
+				var client_packet = {
+					input: null,
+					x: player.x,
+					y: player.y
+				}
+				
+				socket.emit('input',client_packet);
+			}
+			
+			if (cursors.up.isDown && player.body.touching.down)
+			{
+				player.body.velocity.y = -460;
+				up(player.x + player.body.velocity.x/30, player.y);
+			}
+			else if (cursors.down.isDown && player.body.touching.down)
+			{
+				player_fall_through = true;
+				down(player.x + player.body.velocity.x/30, player.y);
+			}
+			
+		}
+		
+		frame = false;
+
+	}
 
 }
