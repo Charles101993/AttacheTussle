@@ -8,7 +8,7 @@ var game_state = {
 		var opponent;
 		var platforms;
 		var cursors;
-
+		var f;
 		player_score = 0;
 		opponent_score = 0;
 		var player_score_text;
@@ -114,10 +114,11 @@ var game_state = {
 		game.load.spritesheet('dude', 'assets/dude.png', 58.25, 74);
 		game.load.spritesheet('dude_no_purse', 'assets/dude_no_purse.png', 58.25, 74);
 		game.load.spritesheet('purse', 'assets/purse.png', 43, 50);
+		game.load.spritesheet('c1_onground', 'assets/c1_onground.png', 74.5, 74);	
 	},
 	
 	create: function(){
-		
+
 		butt_bump_sound = game.add.audio('butt_bump_sound');
 		crowd_gasp = game.add.audio('crowd_gasp');
 		oh_yeah = game.add.audio('oh_yeah');
@@ -183,39 +184,51 @@ var game_state = {
 		ledge = platforms.create(250, 610, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(202, 518, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(262, 494, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(330, 486, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(384, 650, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(426, 652, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(522, 700, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(600, 478, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(150, 120, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(658, 104, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(148, 118, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(94, 378, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		// The player and its settings
 		if(playerID == 'player 1'){
 			player = game.add.sprite(5, game.world.height - 150, 'dude_no_purse');
@@ -293,44 +306,57 @@ var game_state = {
 			game.time.events.add(Phaser.Timer.SECOND * 3, enable_dash, this);
 		}
 		start_taunt_1 = function(p_or_o){
-			p_or_o.frame = 7;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_2, this, p_or_o);
+			if(p_or_o.purse == true){
+				p_or_o.frame = 7;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_2, this, p_or_o);
+			}else stop_taunt();
 		}
 		start_taunt_2 = function(p_or_o){
-			p_or_o.frame = 8;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_3, this, p_or_o);
+			if(p_or_o.purse == true){	
+				p_or_o.frame = 8;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_3, this, p_or_o);
+			} else stop_taunt;
 		}
 		start_taunt_3 = function(p_or_o){
-			p_or_o.frame = 9;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_4, this, p_or_o);
+			if(p_or_o.purse == true){
+				p_or_o.frame = 9;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_4, this, p_or_o);
+			}else stop_taunt();
 		}
 		start_taunt_4 = function(p_or_o){
 			p_or_o.frame = 8;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, stop_taunt, this);
-			
-			if(p_or_o == opponent){
-				opponent_score += 1;
-				opponent_score_text.text = String(opponent_score);
-				
-				if(opponent_score == 10){
-					socket.emit('game end', playerID);
-					socket.removeListener('purse swap', purse_swap_func);
-					socket.removeListener('opponent input', opponent_input_func);
-					game.state.start('game_end', false, true, 'lose', player_score, opponent_score);
+			if(p_or_o.purse == true){
+				if(p_or_o == opponent){
+					opponent_score += 1;
+					opponent_score_text.text = String(opponent_score);
+					if(opponent_score > 7){
+						opponent_score_text.addColor('#f70505', 0);
+					}
+					
+					if(opponent_score == 10){
+						socket.emit('game end', playerID);
+						socket.removeListener('purse swap', purse_swap_func);
+						socket.removeListener('opponent input', opponent_input_func);
+						game.state.start('game_end', false, true, 'lose', player_score, opponent_score);
+					}
 				}
-			}
-			else if(p_or_o == player){
-				player_score += 1;
-				player_score_text.text = String(player_score);
-				
-				if(player_score == 10){
-					socket.emit('game end', playerID);
-					socket.removeListener('purse swap', purse_swap_func);
-					socket.removeListener('opponent input', opponent_input_func);
-					game.state.start('game_end', false, true, 'win', player_score, opponent_score);
+				else if(p_or_o == player){
+					player_score += 1;
+					player_score_text.text = String(player_score);
+					if(player_score > 7){
+						player_score_text.addColor('#f70505', 0);
+					}
+					
+					if(player_score == 10){
+						socket.emit('game end', playerID);
+						socket.removeListener('purse swap', purse_swap_func);
+						socket.removeListener('opponent input', opponent_input_func);
+						game.state.start('game_end', false, true, 'win', player_score, opponent_score);
+					}
 				}
+				game.time.events.add(Phaser.Timer.QUARTER * 2, stop_taunt, this);
 			}
-
+			else stop_taunt();
 		}
 		stop_taunt = function(){
 			can_move = true;
@@ -361,6 +387,7 @@ var game_state = {
 		if(player.body.velocity.y >= 0){
 			game.physics.arcade.collide(player, platforms);
 		}
+
 		game.physics.arcade.collide(purse, platforms);
 		player.body.velocity.x = 0;
 		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
@@ -421,7 +448,11 @@ var game_state = {
 				player.purse = true;
 				opponent.purse = false;
 				player.loadTexture('dude', 0, false);
-				opponent.loadTexture('dude_no_purse', 0, false);
+				opponent.loadTexture('c1_onground', 0, false);
+				game.time.events.add(Phaser.Timer.SECOND * 2, function(){
+					can_move = true;
+					opponent.loadTexture('dude_no_purse', 0, false);	
+				}, this);
 			}
 			else if (cursors.left.isDown)
 			{
@@ -473,9 +504,13 @@ var game_state = {
 			can_move = false;
 			player.purse = false;
 			opponent.purse = true;
-			player.loadTexture('dude_no_purse', 0, false);
+			player.loadTexture('c1_onground', 0, false);
 			opponent.loadTexture('dude', 0, false);
-			game.time.events.add(Phaser.Timer.SECOND * 2, stop_taunt, this);
+			game.time.events.add(Phaser.Timer.SECOND * 2, function(){
+				can_move = true;
+				player.loadTexture('dude_no_purse', 0, false);	
+			}, this);
+			
 		}
 
 		
