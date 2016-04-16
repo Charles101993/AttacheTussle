@@ -377,9 +377,9 @@ var game_state = {
 		
 		// sync opponent position if significant discrepency
 		if(opponent_packet.x != null){			
-			if( (opponent_packet.x - opponent.x) > 10 || (opponent_packet.x - opponent.x) < -10 ){
+			//if( (opponent_packet.x - opponent.x) > 10 || (opponent_packet.x - opponent.x) < -10 ){
 				opponent.x = opponent_packet.x;
-			}
+			//}
 			/* else
 				opponent.x += (opponent_packet.x - opponent.x)*0.2; */
 		}
@@ -527,13 +527,13 @@ var game_state = {
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
-				emit_ass_l(player.x + player.body.velocity.x/30, player.y);
+				emit_ass_l(player.x, player.y);
 				player.body.velocity.x = -75;
 				player.frame = 11;
 				
 			}
 			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
-				emit_ass_r(player.x + player.body.velocity.x/30, player.y);
+				emit_ass_r(player.x, player.y);
 				player.body.velocity.x = 75;
 				player.frame = 10;
 				
@@ -559,7 +559,7 @@ var game_state = {
 
 				player.animations.play('left');
 				
-				left(player.x + player.body.velocity.x/30, player.y);
+				left(player.x, player.y);
 			}
 			else if (cursors.right.isDown)
 			{		
@@ -568,7 +568,7 @@ var game_state = {
 
 				player.animations.play('right');
 				
-				right(player.x + player.body.velocity.x/30, player.y);
+				right(player.x, player.y);
 			}
 			else
 			{
@@ -586,12 +586,12 @@ var game_state = {
 			if (cursors.up.isDown && player.body.touching.down)
 			{
 				player.body.velocity.y = -460;
-				up(player.x + player.body.velocity.x/30, player.y);
+				up(player.x, player.y);
 			}
 			else if (cursors.down.isDown && player.body.touching.down)
 			{
 				player_fall_through = true;
-				down(player.x + player.body.velocity.x/30, player.y);
+				down(player.x, player.y);
 			}
 			
 		}
