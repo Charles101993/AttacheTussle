@@ -3,7 +3,7 @@ var start_menu = {
 	//used to load assets that will be used in this state of the game
 	preload: function(){
 		
-		game.load.spritesheet('play_button', 'assets/play_button.png', 200, 100);
+		game.load.spritesheet('play_button', 'assets/play_button.png', 200, 120);
 		game.load.image('startbackground', 'assets/startbackground.png');
 	},
 	

@@ -155,33 +155,67 @@ var game_state = {
 		platforms.enableBody = true;
 
 		// Here we create the ground.
-		var ground = platforms.create(0, game.world.height - 53, 'ground');
-
-		//  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-		ground.scale.setTo(2, 2);
-
-		//  This stops it from falling away when you jump on it
+		var ground = platforms.create(0, game.world.height -10, 'ground');
+		ground.scale.setTo(10, 1);
 		ground.body.immovable = true;
 
 		//  Now let's create two ledges
-		var ledge = platforms.create(570, 328, 'ground');
+		var ledge = platforms.create(730, 576, 'ground');
+		ledge.scale.setTo(.1, .1);
 		ledge.body.immovable = true;
 
-		ledge = platforms.create(-185, 330, 'ground');
+		ledge = platforms.create(502, 396, 'ground');
+		ledge.scale.setTo(.1, .1);
 		ledge.body.immovable = true;
 
-		ledge = platforms.create(240, 486, 'ground');
+		ledge = platforms.create(552, 302, 'ground');
 		ledge.body.immovable = true;
-		ledge.scale.setTo(.75, 1);
+		ledge.scale.setTo(.1, .1);
 
-		ledge = platforms.create(130, 180, 'ground');
+		ledge = platforms.create(362, 286, 'ground');
 		ledge.body.immovable = true;
-		ledge.scale.setTo(1.28 , .9);
+		ledge.scale.setTo(.1 , .1);
 
-		ledge = platforms.create(65, 704, 'ground');
+		ledge = platforms.create(436, 416, 'ground');
 		ledge.body.immovable = true;
-		ledge.scale.setTo(1.52, 1.4);
+		ledge.scale.setTo(.1,.1);
 		
+		ledge = platforms.create(250, 610, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(202, 518, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(262, 494, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(330, 486, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(384, 650, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(426, 652, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(522, 700, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(600, 478, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(150, 120, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(658, 104, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(148, 118, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
+		ledge = platforms.create(94, 378, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1,.1);
 		// The player and its settings
 		if(playerID == 'player 1'){
 			player = game.add.sprite(5, game.world.height - 150, 'dude_no_purse');
@@ -244,7 +278,13 @@ var game_state = {
 		s_key = game.input.keyboard.addKey(Phaser.Keyboard.S);
 		timer = game.time.create(false);
 		dash = true;
-
+		pause_taunt = function(){
+			player.taunt = false;
+			game.time.events.add(Phaser.Timer.SECOND * 1, resume_taunt, this);
+		}
+		resume_taunt = function(){
+			player.taunt = true;
+		}
 		enable_dash = function(){
 			player.dash = true;
 		}
@@ -301,11 +341,12 @@ var game_state = {
 		player.purse = false;
 		opponent.purse = false;
 		player.dash = true;
-
+		player.taunt = true;
 		
 	},
 	
 	update: function(){
+
 		
 		/* if(!game_music.isPlaying == false){
 			
@@ -317,7 +358,9 @@ var game_state = {
 			frame = true;
 			return;
 		}
-		game.physics.arcade.collide(player, platforms);
+		if(player.body.velocity.y >= 0){
+			game.physics.arcade.collide(player, platforms);
+		}
 		game.physics.arcade.collide(purse, platforms);
 		player.body.velocity.x = 0;
 		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
@@ -335,7 +378,7 @@ var game_state = {
 			opponent.loadTexture('dude',0,true);
 		}
 		if(can_move == true){
-			if(s_key.isDown && player.purse == true){
+			if(s_key.isDown && player.purse == true && player.taunt == true){
 				oh_yeah.play();
 				player.animations.stop();
 				can_move = false;
@@ -372,12 +415,13 @@ var game_state = {
 			else if(s_key.isDown && player_collide && player.purse == false && opponent.purse == true){
 				butt_bump_sound.play();
 				crowd_gasp.play();
+				pause_taunt();
 				emit_purse_swap();
 				player.frame = 11;
 				player.purse = true;
 				opponent.purse = false;
 				player.loadTexture('dude', 0, false);
-				opponent.loadTexture('dude_no_purse', 0, false);	
+				opponent.loadTexture('dude_no_purse', 0, false);
 			}
 			else if (cursors.left.isDown)
 			{
