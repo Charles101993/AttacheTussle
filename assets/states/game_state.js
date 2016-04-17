@@ -293,7 +293,7 @@ var game_state = {
 		//  Player physics properties. Give the little guy a slight bounce.
 
 //		player.body.bounce.y = 0.2;
-		player.body.gravity.y = 450;
+		player.body.gravity.y = 650;
 		player.body.collideWorldBounds = true;
 		purse.body.collideWorldBounds = true;
 
@@ -308,7 +308,7 @@ var game_state = {
 
 		//  Player physics properties. Give the little guy a slight bounce.
 //		opponent.body.bounce.y = 0.2;
-		opponent.body.gravity.y = 450;
+		opponent.body.gravity.y = 650;
 		opponent.body.collideWorldBounds = true;
 
 		//  Our two animations, walking left and right.
