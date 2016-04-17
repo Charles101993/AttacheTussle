@@ -145,9 +145,9 @@ var game_state = {
 
 		game.load.image('sky', 'assets/sky.png');
 		game.load.image('ground', 'assets/platform.png');
+		game.load.spritesheet('purse', 'assets/purse.png', 43, 50);
 		game.load.spritesheet('c1', 'assets/c1.png', 58.25, 74);
 		game.load.spritesheet('c1_no_purse', 'assets/c1_no_purse.png', 58.25, 74);
-		game.load.spritesheet('purse', 'assets/purse.png', 43, 50);
 		game.load.spritesheet('c1_onground', 'assets/c1_onground.png', 74.5, 74);	
 	},
 	
