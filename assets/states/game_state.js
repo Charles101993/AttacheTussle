@@ -1,8 +1,44 @@
 //world game state
 var game_state = {
 	// param is string denoting whether client is player 1 or 2
-	init: function(){
+	init: function(param4, param5){
 		console.log('game_state loaded');		
+		
+		player_character_number = param4;
+		opponent_character_number = param5;
+		
+		if(player_character_number == 0){
+		
+			player_character = 'dude_no_purse';
+		}
+		else if(player_character_number == 1){
+			
+			
+		}
+		else if(player_character_number == 2){
+			
+			
+		}
+		else if(player_character_number == 3){
+			
+			
+		}
+		if(opponent_character_number == 0){
+			
+			opponent_character = 'dude_no_purse';
+		}
+		else if(opponent_character_number == 1){
+			
+			
+		}
+		else if(opponent_character_number == 2){
+			
+			
+		}
+		else if(opponent_character_number == 3){
+			
+			
+		}
 		
 		var player;
 		var opponent;
