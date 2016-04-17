@@ -9,15 +9,15 @@ var game_state = {
 		
 		if(player_character_number == 0){
 		
-			player_character = 'dude_no_purse';
+			player_character = 'c1';
 		}
 		else if(player_character_number == 1){
 			
-			
+			player_character = 'c2';
 		}
 		else if(player_character_number == 2){
 			
-			
+			player_character = 'c3';
 		}
 		else if(player_character_number == 3){
 			
@@ -25,15 +25,15 @@ var game_state = {
 		}
 		if(opponent_character_number == 0){
 			
-			opponent_character = 'dude_no_purse';
+			opponent_character = 'c1';
 		}
 		else if(opponent_character_number == 1){
 			
-			
+			opponent_character = 'c2';
 		}
 		else if(opponent_character_number == 2){
 			
-			
+			opponent_character = 'c3';
 		}
 		else if(opponent_character_number == 3){
 			
