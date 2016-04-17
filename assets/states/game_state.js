@@ -19,10 +19,7 @@ var game_state = {
 			
 			player_character = 'c3';
 		}
-		else if(player_character_number == 3){
-			
-			
-		}
+
 		if(opponent_character_number == 0){
 			
 			opponent_character = 'c1';
@@ -34,10 +31,6 @@ var game_state = {
 		else if(opponent_character_number == 2){
 			
 			opponent_character = 'c3';
-		}
-		else if(opponent_character_number == 3){
-			
-			
 		}
 		
 		var player;
@@ -150,8 +143,8 @@ var game_state = {
 
 		game.load.image('sky', 'assets/sky.png');
 		game.load.image('ground', 'assets/platform.png');
-		game.load.spritesheet('dude', 'assets/dude.png', 58.25, 74);
-		game.load.spritesheet('dude_no_purse', 'assets/dude_no_purse.png', 58.25, 74);
+		game.load.spritesheet('c1', 'assets/c1.png', 58.25, 74);
+		game.load.spritesheet('c1_no_purse', 'assets/c1_no_purse.png', 58.25, 74);
 		game.load.spritesheet('purse', 'assets/purse.png', 43, 50);
 		game.load.spritesheet('c1_onground', 'assets/c1_onground.png', 74.5, 74);	
 	},
@@ -258,8 +251,8 @@ var game_state = {
 		ledge.scale.setTo(.1,.1);
 		// The player and its settings
 		if(playerID == 'player 1'){
-			player = game.add.sprite(5, game.world.height - 150, 'dude_no_purse');
-			opponent = game.add.sprite(750, game.world.height - 150, 'dude_no_purse');
+			player = game.add.sprite(5, game.world.height - 150, player_character + '_no_purse');
+			opponent = game.add.sprite(750, game.world.height - 150, opponent_character + '_no_purse');
 			
 			//  player score
 			player_score_text = game.add.text(50, 750, String(player_score), { fontSize: '32px', fill: '#000' });
@@ -267,8 +260,8 @@ var game_state = {
 			opponent_score_text = game.add.text(750, 750, String(opponent_score), { fontSize: '32px', fill: '#000' });
 		}
 		else if(playerID == 'player 2'){
-			opponent = game.add.sprite(32, game.world.height - 150, 'dude_no_purse');
-			player = game.add.sprite(736, game.world.height - 150, 'dude_no_purse');
+			opponent = game.add.sprite(32, game.world.height - 150, opponent_character + '_no_purse');
+			player = game.add.sprite(736, game.world.height - 150, player_character + '_no_purse');
 			
 			//  player score
 			player_score_text = game.add.text(750, 750, String(player_score), { fontSize: '32px', fill: '#000' });
@@ -410,12 +403,12 @@ var game_state = {
 		if(purse_collide){
 			purse.destroy();
 			player.purse = true;
-			player.loadTexture('dude',0,true);
+			player.loadTexture(player_character,0,true);
 		}
 		if(opponent_collide){
 			purse.destroy();
 			opponent.purse = true;
-			opponent.loadTexture('dude',0,true);
+			opponent.loadTexture(opponent_character,0,true);
 		}
 		
 		if(packet_queue.length > 0) opponent_packet = packet_queue.shift();
@@ -451,11 +444,11 @@ var game_state = {
 			can_move = false;
 			player.purse = false;
 			opponent.purse = true;
-			player.loadTexture('c1_onground', 0, false);
-			opponent.loadTexture('dude', 0, false);
+			player.loadTexture(player_character + '_onground', 0, false);
+			opponent.loadTexture(opponent_character, 0, false);
 			game.time.events.add(Phaser.Timer.SECOND * 2, function(){
 				can_move = true;
-				player.loadTexture('dude_no_purse', 0, false);	
+				player.loadTexture(player_character + '_no_purse', 0, false);	
 			}, this);
 		}
 
@@ -597,11 +590,11 @@ var game_state = {
 				player.frame = 11;
 				player.purse = true;
 				opponent.purse = false;
-				player.loadTexture('dude', 0, false);
-				opponent.loadTexture('c1_onground', 0, false);
+				player.loadTexture(player_character, 0, false);
+				opponent.loadTexture(opponent_character + '_onground', 0, false);
 				game.time.events.add(Phaser.Timer.SECOND * 2, function(){
 					can_move = true;
-					opponent.loadTexture('dude_no_purse', 0, false);	
+					opponent.loadTexture(opponent_character + '_no_purse', 0, false);	
 				}, this);
 			}
 			else if (cursors.left.isDown)

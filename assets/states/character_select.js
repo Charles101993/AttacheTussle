@@ -48,7 +48,7 @@ var character_select = {
 				
 				//choose which sprite to display
 				
-				if(player_char_counter > 3) player_char_counter = 0;
+				if(player_char_counter > 2) player_char_counter = 0;
 				console.log(player_char_counter);
 				switch(player_char_counter){
 					case 0: player_character.frame = 0;
@@ -56,8 +56,6 @@ var character_select = {
 					case 1: player_character.frame = 1;
 					   break;
 					case 2: player_character.frame = 2;
-					   break;
-					case 3: player_character.frame = 3;
 					   break;
 				}
 				
@@ -91,7 +89,7 @@ var character_select = {
 			
 			player_character = game.add.sprite(150,350, 'sample_character',0);
 			player_character.anchor.setTo(0.5, 0.5);
-			player_character.animations.add('characters', [0,1,2,3]);
+			player_character.animations.add('characters', [0,1,2]);
 	
 			downButton = this.game.add.button(150, 450, 'down_arrow', this.nextChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
@@ -108,7 +106,7 @@ var character_select = {
 			
 			player_character = game.add.sprite(650,350, 'sample_character',0);
 			player_character.anchor.setTo(0.5, 0.5);
-			player_character.animations.add('characters', [0,1,2,3]);
+			player_character.animations.add('characters', [0,1,2]);
 	
 			downButton = this.game.add.button(650, 450, 'down_arrow', this.prevChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
@@ -137,7 +135,7 @@ var character_select = {
 		
 		//choose which sprite to display
 		
-		if(player_char_counter < 0) player_char_counter = 3;
+		if(player_char_counter < 0) player_char_counter = 2;
 		console.log(player_char_counter);
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
@@ -145,8 +143,6 @@ var character_select = {
 			case 1: player_character.frame = 1;
 			   break;
 			case 2: player_character.frame = 2;
-			   break;
-			case 3: player_character.frame = 3;
 			   break;
 		}
 		
@@ -169,7 +165,7 @@ var character_select = {
 		
 		//choose which sprite to display
 		
-		if(player_char_counter > 3) player_char_counter = 0;
+		if(player_char_counter > 2) player_char_counter = 0;
 		console.log(player_char_counter);
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
@@ -177,8 +173,6 @@ var character_select = {
 			case 1: player_character.frame = 1;
 			   break;
 			case 2: player_character.frame = 2;
-			   break;
-			case 3: player_character.frame = 3;
 			   break;
 		}
 		
@@ -219,8 +213,6 @@ var character_select = {
 			case 1: opponent_character.frame = 1;
 			   break;
 			case 2: opponent_character.frame = 2;
-			   break;
-			case 3: opponent_character.frame = 3;
 			   break;
 		}
 
