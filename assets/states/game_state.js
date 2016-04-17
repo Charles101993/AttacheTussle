@@ -171,7 +171,10 @@ var game_state = {
 		
 		game.stage.disableVisibilityChange = true;
 		
-		game.scale.setGameSize(800, 800);
+		game.scale.setGameSize(820, 800);
+		game.camera.x = 10;
+		game.camera.height = 800;
+		game.camera.width = 800;
 		
 		menu_music.stop();
 		
@@ -183,7 +186,7 @@ var game_state = {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		//  A simple background for our game
-		game.add.sprite(0, 0, 'sky');
+		game.add.sprite(5, 0, 'sky');
 		purse = game.add.sprite(380, game.world.height - 750, 'purse');
 
 		//  The platforms group contains the ground and the 2 ledges we can jump on
@@ -514,6 +517,7 @@ var game_state = {
 		
 		if (opponent_packet.input == 'up' && opponent.body.touching.down)
 		{
+			opponent.x = opponent_packet.x;
 			opponent.body.velocity.y = -460;
 		}
 		else if (opponent_packet.input == 'down' && opponent.body.touching.down)
@@ -645,6 +649,8 @@ var game_state = {
 			}
 			
 		}
+		
+		if(player.x>790) game.camera.x++;
 		
 		frame = false;
 
