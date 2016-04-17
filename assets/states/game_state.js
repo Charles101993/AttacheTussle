@@ -396,10 +396,6 @@ var game_state = {
 	},
 	
 	update: function(){
-
-		if(player.body.velocity.y >= 0){
-			game.physics.arcade.collide(player, platforms);
-		}
 		
 		game.physics.arcade.collide(purse, platforms);
 		
@@ -430,16 +426,16 @@ var game_state = {
 				opponent.x += (opponent_packet.x - opponent.x)*0.2; */
 		}
 		if(opponent_packet.y != null){
-			if( (opponent_packet.y - opponent.y) > 10 || (opponent_packet.y - opponent.y) < -10 && opponent.body.onFloor() ){
-				opponent.y = opponent_packet.y - 3;
-			}
+			//if( (opponent_packet.y - opponent.y) > 10 || (opponent_packet.y - opponent.y) < -10 && opponent.body.onFloor() ){
+				if( opponent_packet.input == 'left' || opponent_packet.input == 'right' ) opponent.y = opponent_packet.y;
+			//}
 		}
 		
 		// opponent fall through platform?
 		if(!game.physics.arcade.overlap(opponent, platforms, null, null, this)){
 			opponent_fall_through = false;
 		}
-		if(!opponent_fall_through){
+		if(!opponent_fall_through && opponent.body.velocity.y >= 0){
 			game.physics.arcade.collide(opponent, platforms);
 		}
 		else{
@@ -547,7 +543,7 @@ var game_state = {
 		if(!game.physics.arcade.overlap(player, platforms, null, null, this)){
 			player_fall_through = false;
 		}
-		if(!player_fall_through){
+		if(!player_fall_through && player.body.velocity.y >= 0){
 			game.physics.arcade.collide(player, platforms);
 		}
 		else{
@@ -649,8 +645,6 @@ var game_state = {
 			}
 			
 		}
-		
-		if(player.x>790) game.camera.x++;
 		
 		frame = false;
 
