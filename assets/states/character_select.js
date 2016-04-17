@@ -20,7 +20,7 @@ var character_select = {
 		
 		game.load.spritesheet('ready_button', 'assets/ready_button.png', 150, 75);
 		game.load.image('character_select_background', 'assets/character_select_background.png');
-		game.load.spritesheet('sample_character', 'assets/sample_character_sheet.png', 51.75, 65);
+		game.load.spritesheet('sample_character', 'assets/sample_character_sheet.png', 57.6, 65);
 		game.load.spritesheet('down_arrow', 'assets/down_arrow_button.png', 50, 75);
 		game.load.spritesheet('up_arrow', 'assets/up_arrow_button.png', 50, 75);
 	},
