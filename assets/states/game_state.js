@@ -207,62 +207,83 @@ var game_state = {
 		ground.body.immovable = true;
 
 		//  Now let's create two ledges
-		var ledge = platforms.create(730, 576, 'ground');
+		var ledge = platforms.create(738, 576, 'ground');
 		ledge.scale.setTo(.1, .1);
 		ledge.body.immovable = true;
+		ledge.anchor.setTo(0.5, 0.5);
 
 		ledge = platforms.create(502, 396, 'ground');
 		ledge.scale.setTo(.1, .1);
 		ledge.body.immovable = true;
-
+ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(552, 302, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1, .1);
-
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(399, 118, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1, .1);
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(278, 388, 'ground');
+		ledge.body.immovable = true;
+		ledge.scale.setTo(.1, .1);
+		ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(362, 286, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1 , .1);
-
+ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(436, 416, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		
-		ledge = platforms.create(250, 610, 'ground');
+		ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(250, 620, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+
 		ledge = platforms.create(202, 518, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		ledge = platforms.create(262, 494, 'ground');
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(262, 507, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(330, 486, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(384, 650, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(426, 652, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+ledge.anchor.setTo(0.5, 0.5);
 		ledge = platforms.create(522, 700, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		ledge = platforms.create(600, 478, 'ground');
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(614, 478, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		ledge = platforms.create(150, 120, 'ground');
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(146, 120, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		ledge = platforms.create(658, 104, 'ground');
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(657, 112, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		ledge = platforms.create(148, 118, 'ground');
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(158, 118, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
-		ledge = platforms.create(94, 378, 'ground');
+ledge.anchor.setTo(0.5, 0.5);
+		ledge = platforms.create(98, 380, 'ground');
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
+ledge.anchor.setTo(0.5, 0.5);
 		// The player and its settings
 		if(playerID == 'player 1'){
 			player = game.add.sprite(5, game.world.height - 150, player_character + '_no_purse');
