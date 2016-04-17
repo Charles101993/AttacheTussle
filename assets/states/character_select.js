@@ -231,7 +231,7 @@ var character_select = {
 			
 			socket.removeListener('opponent character', opponent_char_func);
 			
-			game.state.start('game', player_char_counter, opponent_char_counter);
+			game.state.start('game', false, true, player_char_counter, opponent_char_counter);
 		}
 	}
 
