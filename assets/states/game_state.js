@@ -4,6 +4,7 @@ var game_state = {
 	init: function(param4, param5){
 		console.log('game_state loaded');		
 		
+		//assigning numbers for the character chosen in the previous state
 		player_character_number = param4;
 		opponent_character_number = param5;
 		
@@ -139,6 +140,7 @@ var game_state = {
 	
 	},
 	
+	//loading all assets that will be shown in the game state
 	preload: function(){
 
 		game.load.image('sky', 'assets/sky.png');
