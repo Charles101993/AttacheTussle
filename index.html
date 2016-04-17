@@ -9,15 +9,13 @@
 
 
 <html lang="en"> 
+<style type="text/css">
+    
+</style>
 <head> 
     <meta charset="UTF-8" />
-    <title>Phaser</title>
-    <style type="text/css">
-    html, body {
-        height:100%;
-        min-height: 1000px;
-    }
-    </style>
+    <title>Tussle</title>
+    
 </head>
 <body bgcolor = "#000000">
 <script type="text/javascript">
@@ -56,17 +54,21 @@ game.state.start('boot');
 
 </script>
 <style>
+html, body {
+    height:100%;
+    min-height: 1200px;
+}
 div.absolute {
     position: absolute;
-    bottom: 0%;
+    top: 800px;
     left: 30%;
     right:30%;
     color: white;
 } 
 div.keys {
-    position: absolute;
-    bottom: 90%;
-    left: 20%;
+    position: relative;
+    top: 0px;
+    left: 10%;
     right:10%;
     color: white;
 }
