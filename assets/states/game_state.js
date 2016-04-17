@@ -149,8 +149,8 @@ var game_state = {
 		game.load.spritesheet('c1', 'assets/c1.png', 58.25, 74);
 		game.load.spritesheet('c1_no_purse', 'assets/c1_no_purse.png', 58.25, 74);
 		game.load.spritesheet('c1_onground', 'assets/c1_onground.png', 74.5, 74);
-		game.load.spritesheet('c2', 'assets/c2.png', 43.42, 74);
-		game.load.spritesheet('c2_no_purse', 'assets/c2_no_purse.png', 43.42, 74);
+		game.load.spritesheet('c2', 'assets/c2.png', 60, 74);
+		game.load.spritesheet('c2_no_purse', 'assets/c2_no_purse.png', 60, 74);
 		game.load.spritesheet('c2_onground', 'assets/c2_onground.png', 74.5, 74);			
 	},
 	
