@@ -278,7 +278,6 @@ var game_state = {
 			player_score_text = game.add.text(750, 750, String(player_score), { fontSize: '32px', fill: '#000' });
 			//  opponent score
 			opponent_score_text = game.add.text(50,750, String(opponent_score), { fontSize: '32px', fill: '#000' });
-
 		}
 		
 		//  We need to enable physics on the player
@@ -462,14 +461,14 @@ var game_state = {
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
-			opponent.body.velocity.x = -150;
+			opponent.body.velocity.x = -200;
 
 			opponent.animations.play('left');
 		}
 		else if (opponent_packet.input == 'right')
 		{
 			//  Move to the right
-			opponent.body.velocity.x = 150;
+			opponent.body.velocity.x = 200;
 
 			opponent.animations.play('right');
 		}
@@ -479,26 +478,26 @@ var game_state = {
 		}
 		else if (opponent_packet.input == 'l_dash')
 		{
-			opponent.body.velocity.x = -400;
+			opponent.body.velocity.x = -600;
 			if(dash_count > 4){
 				dash_count = 0;
 			}
 		}
 		else if (opponent_packet.input == 'r_dash')
 		{
+			opponent.body.velocity.x = 600;
 			if(dash_count > 4){
 				dash_count = 0;
 			}
-			opponent.body.velocity.x = 400;
 		}
 		else if (opponent_packet.input == 'ass_r')
 		{
-			opponent.body.velocity.x = 75;
+			opponent.body.velocity.x = 100;
 			opponent.frame = 10;
 		}
 		else if (opponent_packet.input == 'ass_l')
 		{
-			opponent.body.velocity.x = -75;
+			opponent.body.velocity.x = -100;
 			opponent.frame = 11;
 		}
 		else if (opponent_packet.input == true && player.purse == true)
@@ -517,7 +516,7 @@ var game_state = {
 		if (opponent_packet.input == 'up' && opponent.body.touching.down)
 		{
 			opponent.x = opponent_packet.x;
-			opponent.body.velocity.y = -460;
+			opponent.body.velocity.y = -560;
 		}
 		else if (opponent_packet.input == 'down' && opponent.body.touching.down)
 		{
@@ -566,24 +565,24 @@ var game_state = {
 			else if(a_key.isDown && player.dash == true){
 				whoosh.play();
 				l_dash();
-				player.body.velocity.x = -400;
+				player.body.velocity.x = -600;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if(d_key.isDown && player.dash == true){
 				whoosh.play();
 				r_dash();
-				player.body.velocity.x = 400;
+				player.body.velocity.x = 600;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
 				emit_ass_l(player.x, player.y);
-				player.body.velocity.x = -75;
+				player.body.velocity.x = -100;
 				player.frame = 11;
 				
 			}
 			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
 				emit_ass_r(player.x, player.y);
-				player.body.velocity.x = 75;
+				player.body.velocity.x = 100;
 				player.frame = 10;
 				
 			}
@@ -608,7 +607,7 @@ var game_state = {
 			else if (cursors.left.isDown)
 			{			
 				//  Move to the left
-				player.body.velocity.x = -150;
+				player.body.velocity.x = -200;
 
 				player.animations.play('left');
 				
@@ -617,7 +616,7 @@ var game_state = {
 			else if (cursors.right.isDown)
 			{		
 				//  Move to the right
-				player.body.velocity.x = 150;
+				player.body.velocity.x = 200;
 
 				player.animations.play('right');
 				
@@ -638,7 +637,7 @@ var game_state = {
 			
 			if (cursors.up.isDown && player.body.touching.down)
 			{
-				player.body.velocity.y = -460;
+				player.body.velocity.y = -560;
 				up(player.x, player.y);
 			}
 			else if (cursors.down.isDown && player.body.touching.down)
