@@ -166,6 +166,7 @@ var game_state = {
 		crowd_gasp = game.add.audio('crowd_gasp');
 		oh_yeah = game.add.audio('oh_yeah');
 		whoosh = game.add.audio('whoosh');
+		timer_beep = game.add.audio('timer_beep');
 		
 		socket.on('purse swap', purse_swap_func = function(input){
 			opponent_swap = input;
@@ -186,7 +187,7 @@ var game_state = {
 		
 		game_music = game.add.audio('game_music');
 		
-		game_music.play('', 0, .1);
+		game_music.play('', 0, .7);
 	
 		//  We're going to be using physics, so enable the Arcade Physics system
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -202,10 +203,14 @@ var game_state = {
 		platforms.enableBody = true;
 
 		// Here we create the ground.
-		var ground = platforms.create(0, game.world.height -10, 'ground');
+		var ground = platforms.create(0, game.world.height, 'ground');
 		ground.scale.setTo(10, 1);
 		ground.body.immovable = true;
-
+		
+		ground = platforms.create(0, game.world.height - 51, 'ground');
+		ground.scale.setTo(10, 1);
+		ground.body.immovable = true;
+		
 		//  Now let's create two ledges
 		var ledge = platforms.create(738, 576, 'ground');
 		ledge.scale.setTo(.1, .1);
@@ -496,6 +501,8 @@ var game_state = {
 	},
 	
 	update: function(){
+		
+		
 		
 		game.physics.arcade.collide(purse, platforms);
 		
