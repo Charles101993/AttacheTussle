@@ -113,7 +113,6 @@ var game_state = {
 		emit_taunt = function(){	
 			var client_packet = { 
 			   input: 'taunt',
-			   _score: player_score
 			}
 			socket.emit('input', client_packet);
 		}
@@ -174,7 +173,6 @@ var game_state = {
 		//sockets for swapping the purse and listening for opponent input
 		socket.on('purse swap', purse_swap_func = function(input){
 			opponent_swap = input;
-			opponent_score = _score;
 		});
 
 		socket.on('opponent input', opponent_input_func = function(input){
