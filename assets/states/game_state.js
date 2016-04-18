@@ -149,10 +149,14 @@ var game_state = {
 		game.load.spritesheet('c1', 'assets/c1.png', 58.25, 74);
 		game.load.spritesheet('c1_no_purse', 'assets/c1_no_purse.png', 58.25, 74);
 		game.load.spritesheet('c1_onground', 'assets/c1_onground.png', 74.5, 74);
-		game.load.spritesheet('c2', 'assets/c2.png', 43.42, 74);
-		game.load.spritesheet('c2_no_purse', 'assets/c2_no_purse.png', 43.42, 74);
+		game.load.spritesheet('c2', 'assets/c2.png', 60, 74);
+		game.load.spritesheet('c2_no_purse', 'assets/c2_no_purse.png', 60, 74);
 		game.load.spritesheet('c2_onground', 'assets/c2_onground.png', 74.5, 74);
-		game.load.spritesheet('smoke', 'assets/smoke.png', 255.2, 239);			
+		game.load.spritesheet('c3', 'assets/c3.png', 60, 74);
+		game.load.spritesheet('c3_no_purse', 'assets/c3_no_purse.png', 60, 74);
+		game.load.spritesheet('c3_onground', 'assets/c3_onground.png', 74.5, 74);
+		game.load.spritesheet('smoke', 'assets/smoke.png', 255.2, 239);		
+
 	},
 	
 
@@ -173,7 +177,10 @@ var game_state = {
 		
 		game.stage.disableVisibilityChange = true;
 		
-		game.scale.setGameSize(800, 800);
+		game.scale.setGameSize(820, 800);
+		game.camera.x = 10;
+		game.camera.height = 800;
+		game.camera.width = 800;
 		
 		menu_music.stop();
 		
@@ -185,7 +192,7 @@ var game_state = {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 
 		//  A simple background for our game
-		game.add.sprite(0, 0, 'sky');
+		game.add.sprite(5, 0, 'sky');
 		purse = game.add.sprite(380, game.world.height - 750, 'purse');
 
 		//  The platforms group contains the ground and the 2 ledges we can jump on
@@ -274,7 +281,6 @@ var game_state = {
 			player_score_text = game.add.text(750, 750, String(player_score), { fontSize: '32px', fill: '#000' });
 			//  opponent score
 			opponent_score_text = game.add.text(50,750, String(opponent_score), { fontSize: '32px', fill: '#000' });
-
 		}
 		
 		
@@ -338,7 +344,7 @@ var game_state = {
 		//  Player physics properties. Give the little guy a slight bounce.
 
 //		player.body.bounce.y = 0.2;
-		player.body.gravity.y = 450;
+		player.body.gravity.y = 650;
 		player.body.collideWorldBounds = true;
 		purse.body.collideWorldBounds = true;
 
@@ -353,7 +359,7 @@ var game_state = {
 
 		//  Player physics properties. Give the little guy a slight bounce.
 //		opponent.body.bounce.y = 0.2;
-		opponent.body.gravity.y = 450;
+		opponent.body.gravity.y = 650;
 		opponent.body.collideWorldBounds = true;
 
 		//  Our two animations, walking left and right.
@@ -461,12 +467,6 @@ var game_state = {
 	},
 	
 	update: function(){
-
-
-
-		if(player.body.velocity.y >= 0){
-			game.physics.arcade.collide(player, platforms);
-		}
 		
 		game.physics.arcade.collide(purse, platforms);
 		
@@ -497,16 +497,16 @@ var game_state = {
 				opponent.x += (opponent_packet.x - opponent.x)*0.2; */
 		}
 		if(opponent_packet.y != null){
-			if( (opponent_packet.y - opponent.y) > 10 || (opponent_packet.y - opponent.y) < -10 && opponent.body.onFloor() ){
-				opponent.y = opponent_packet.y - 3;
-			}
+			//if( (opponent_packet.y - opponent.y) > 10 || (opponent_packet.y - opponent.y) < -10 && opponent.body.onFloor() ){
+				if( opponent_packet.input == 'left' || opponent_packet.input == 'right' ) opponent.y = opponent_packet.y;
+			//}
 		}
 		
 		// opponent fall through platform?
 		if(!game.physics.arcade.overlap(opponent, platforms, null, null, this)){
 			opponent_fall_through = false;
 		}
-		if(!opponent_fall_through){
+		if(!opponent_fall_through && opponent.body.velocity.y >= 0){
 			game.physics.arcade.collide(opponent, platforms);
 		}
 		else{
@@ -530,14 +530,14 @@ var game_state = {
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
-			opponent.body.velocity.x = -150;
+			opponent.body.velocity.x = -200;
 
 			opponent.animations.play('left');
 		}
 		else if (opponent_packet.input == 'right')
 		{
 			//  Move to the right
-			opponent.body.velocity.x = 150;
+			opponent.body.velocity.x = 200;
 
 			opponent.animations.play('right');
 		}
@@ -547,26 +547,26 @@ var game_state = {
 		}
 		else if (opponent_packet.input == 'l_dash')
 		{
-			opponent.body.velocity.x = -400;
+			opponent.body.velocity.x = -600;
 			if(dash_count > 4){
 				dash_count = 0;
 			}
 		}
 		else if (opponent_packet.input == 'r_dash')
 		{
+			opponent.body.velocity.x = 600;
 			if(dash_count > 4){
 				dash_count = 0;
 			}
-			opponent.body.velocity.x = 400;
 		}
 		else if (opponent_packet.input == 'ass_r')
 		{
-			opponent.body.velocity.x = 75;
+			opponent.body.velocity.x = 100;
 			opponent.frame = 10;
 		}
 		else if (opponent_packet.input == 'ass_l')
 		{
-			opponent.body.velocity.x = -75;
+			opponent.body.velocity.x = -100;
 			opponent.frame = 11;
 		}
 		else if (opponent_packet.input == true && player.purse == true)
@@ -584,7 +584,8 @@ var game_state = {
 		
 		if (opponent_packet.input == 'up' && opponent.body.touching.down)
 		{
-			opponent.body.velocity.y = -460;
+			opponent.x = opponent_packet.x;
+			opponent.body.velocity.y = -560;
 		}
 		else if (opponent_packet.input == 'down' && opponent.body.touching.down)
 		{
@@ -613,7 +614,7 @@ var game_state = {
 		if(!game.physics.arcade.overlap(player, platforms, null, null, this)){
 			player_fall_through = false;
 		}
-		if(!player_fall_through){
+		if(!player_fall_through && player.body.velocity.y >= 0){
 			game.physics.arcade.collide(player, platforms);
 		}
 		else{
@@ -633,24 +634,24 @@ var game_state = {
 			else if(a_key.isDown && player.dash == true){
 				whoosh.play();
 				l_dash();
-				player.body.velocity.x = -400;
+				player.body.velocity.x = -600;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if(d_key.isDown && player.dash == true){
 				whoosh.play();
 				r_dash();
-				player.body.velocity.x = 400;
+				player.body.velocity.x = 600;
 				game.time.events.add(Phaser.Timer.QUARTER *1, disable_dash, this);
 			}
 			else if (s_key.isDown && cursors.left.isDown && player_collide == false && player.purse == false){
 				emit_ass_l(player.x, player.y);
-				player.body.velocity.x = -75;
+				player.body.velocity.x = -100;
 				player.frame = 11;
 				
 			}
 			else if (s_key.isDown && cursors.right.isDown && player_collide == false && player.purse == false){
 				emit_ass_r(player.x, player.y);
-				player.body.velocity.x = 75;
+				player.body.velocity.x = 100;
 				player.frame = 10;
 				
 			}
@@ -675,7 +676,7 @@ var game_state = {
 			else if (cursors.left.isDown)
 			{			
 				//  Move to the left
-				player.body.velocity.x = -150;
+				player.body.velocity.x = -200;
 
 				player.animations.play('left');
 				
@@ -684,7 +685,7 @@ var game_state = {
 			else if (cursors.right.isDown)
 			{		
 				//  Move to the right
-				player.body.velocity.x = 150;
+				player.body.velocity.x = 200;
 
 				player.animations.play('right');
 				
@@ -705,7 +706,7 @@ var game_state = {
 			
 			if (cursors.up.isDown && player.body.touching.down)
 			{
-				player.body.velocity.y = -460;
+				player.body.velocity.y = -560;
 				up(player.x, player.y);
 			}
 			else if (cursors.down.isDown && player.body.touching.down)
