@@ -151,11 +151,13 @@ var game_state = {
 		game.load.spritesheet('c1_onground', 'assets/c1_onground.png', 74.5, 74);
 		game.load.spritesheet('c2', 'assets/c2.png', 43.42, 74);
 		game.load.spritesheet('c2_no_purse', 'assets/c2_no_purse.png', 43.42, 74);
-		game.load.spritesheet('c2_onground', 'assets/c2_onground.png', 74.5, 74);			
+		game.load.spritesheet('c2_onground', 'assets/c2_onground.png', 74.5, 74);
+		game.load.spritesheet('smoke', 'assets/smoke.png', 255.2, 239);			
 	},
 	
+
+
 	create: function(){
-		
 		butt_bump_sound = game.add.audio('butt_bump_sound');
 		crowd_gasp = game.add.audio('crowd_gasp');
 		oh_yeah = game.add.audio('oh_yeah');
@@ -275,6 +277,54 @@ var game_state = {
 
 		}
 		
+		
+		emitter1 = game.add.emitter(160, 770, 400);
+		emitter2 = game.add.emitter(205, 735, 400);
+		emitter3 = game.add.emitter(276.25, 770, 400);
+		emitter4 = game.add.emitter(392.5, 770, 400);
+		emitter5 = game.add.emitter(508.75, 770, 400);
+		emitter6 = game.add.emitter(580, 735, 400);
+		emitter7 = game.add.emitter(625, 770, 400);
+
+		emitter1.makeParticles('smoke');
+		emitter2.makeParticles('smoke');
+		emitter3.makeParticles('smoke');
+		emitter4.makeParticles('smoke');
+		emitter5.makeParticles('smoke');
+		emitter6.makeParticles('smoke');
+		emitter7.makeParticles('smoke');
+
+		emitter1.minParticleScale = 0.40;
+		emitter1.maxParticleScale = 0.40;
+		emitter1.alpha = 0.3;
+		emitter2.minParticleScale = 0.40;
+		emitter2.maxParticleScale = 0.40;
+		emitter2.alpha = 0.3;
+		emitter3.minParticleScale = 0.40;
+		emitter3.maxParticleScale = 0.40;
+		emitter3.alpha = 0.3;
+		emitter4.minParticleScale = 0.40;
+		emitter4.maxParticleScale = 0.40;
+		emitter4.alpha = 0.3;
+		emitter5.minParticleScale = 0.40;
+		emitter5.maxParticleScale = 0.40;
+		emitter5.alpha = 0.3;
+		emitter6.minParticleScale = 0.40;
+		emitter6.maxParticleScale = 0.40;
+		emitter6.alpha = 0.3;
+		emitter7.minParticleScale = 0.40;
+		emitter7.maxParticleScale = 0.40;
+		emitter7.alpha = 0.3;
+
+
+		emitter1.gravity = 50;
+		emitter2.gravity = 50;
+		emitter3.gravity = 50;
+		emitter4.gravity = 50;
+		emitter5.gravity = 50;
+		emitter6.gravity = 50;
+		emitter7.gravity = 50;
+
 		//  We need to enable physics on the player
 		game.physics.arcade.enable(player);
 		game.physics.arcade.enable(opponent);
@@ -352,6 +402,15 @@ var game_state = {
 					opponent_score_text.text = String(opponent_score);
 					if(opponent_score > 7){
 						opponent_score_text.addColor('#f70505', 0);
+						if(opponent_score > 7  || player_score > 7){
+							emitter1.start(false, 2000, 20);
+							emitter2.start(false, 2000, 20);
+							emitter3.start(false, 2000, 20);
+							emitter4.start(false, 2000, 20);
+							emitter5.start(false, 2000, 20);
+							emitter6.start(false, 2000, 20);
+							emitter7.start(false, 2000, 20);
+						}
 					}
 					
 					if(opponent_score == 10){
@@ -366,6 +425,15 @@ var game_state = {
 					player_score_text.text = String(player_score);
 					if(player_score > 7){
 						player_score_text.addColor('#f70505', 0);
+						if(opponent_score > 7  || player_score > 7){
+							emitter1.start(false, 2000, 20);
+							emitter2.start(false, 2000, 20);
+							emitter3.start(false, 2000, 20);
+							emitter4.start(false, 2000, 20);
+							emitter5.start(false, 2000, 20);
+							emitter6.start(false, 2000, 20);
+							emitter7.start(false, 2000, 20);
+						}
 					}
 					
 					if(player_score == 10){
@@ -381,8 +449,8 @@ var game_state = {
 		}
 		stop_taunt = function(){
 			can_move = true;
+
 		}
-	
 
 		
 		player.purse = false;
@@ -393,6 +461,8 @@ var game_state = {
 	},
 	
 	update: function(){
+
+
 
 		if(player.body.velocity.y >= 0){
 			game.physics.arcade.collide(player, platforms);
