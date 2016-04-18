@@ -53,8 +53,7 @@ var game_state = {
 			var client_packet = { 
 			   input: 'left',
 				    x: x,
-				    y: y,
-				    _score: player_score
+				    y: y 
 			}
 											
 			socket.emit('input', client_packet);
@@ -111,7 +110,8 @@ var game_state = {
 		}
 		emit_taunt = function(){	
 			var client_packet = { 
-			   input: 'taunt'
+			   input: 'taunt',
+			   _score: player_score
 			}
 			socket.emit('input', client_packet);
 		}
@@ -170,6 +170,7 @@ var game_state = {
 		
 		socket.on('purse swap', purse_swap_func = function(input){
 			opponent_swap = input;
+			opponent_score = _score;
 		});
 
 		socket.on('opponent input', opponent_input_func = function(input){
@@ -562,7 +563,6 @@ var game_state = {
 		{
 			//  Move to the left
 			opponent.body.velocity.x = -200;
-			opponent_score = opponent_packet._score;
 
 			opponent.animations.play('left');
 		}
@@ -660,8 +660,8 @@ var game_state = {
 				oh_yeah.play();
 				player.animations.stop();
 				can_move = false;
-				start_taunt_1(player);
 				emit_taunt();
+				start_taunt_1(player);
 			}
 			else if(a_key.isDown && player.dash == true){
 				whoosh.play();
