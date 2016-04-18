@@ -55,7 +55,7 @@ var game_state = {
 			var client_packet = { 
 			   input: 'left',
 				    x: x,
-				    y: y 
+				    y: y
 			}
 											
 			socket.emit('input', client_packet);
@@ -132,7 +132,12 @@ var game_state = {
 			}
 			socket.emit('input', client_packet);
 		}
-		
+		emit_score = function(score){
+			var client_packet = {
+				input: score
+			}
+			socket.emit('input', client_packet);
+		}
 		player_fall_through = false;
 		opponent_fall_through = false;
 
@@ -465,6 +470,7 @@ var game_state = {
 				}
 				else if(p_or_o == player){
 					player_score += 1;
+					emit_score(player_score);
 					player_score_text.text = String(player_score);
 					if(player_score > 7){
 						player_score_text.addColor('#f70505', 0);
@@ -574,7 +580,9 @@ var game_state = {
 				player.loadTexture(player_character + '_no_purse', 0, false);	
 			}, this);
 		}
-
+		if (opponent_packet.input == 1 ||opponent_packet.input == 2 ||opponent_packet.input == 3 ||opponent_packet.input == 4 ||opponent_packet.input == 5 ||opponent_packet.input == 6 ||opponent_packet.input == 7 ||opponent_packet.input == 8 ||opponent_packet.input == 9 || opponent_packet.input == 10 ){
+			opponent_score_text.text = String(opponent_packet.input);
+		}
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
