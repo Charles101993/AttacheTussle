@@ -57,7 +57,7 @@ var game_state = {
 			var client_packet = { 
 			   input: 'left',
 				    x: x,
-				    y: y 
+				    y: y
 			}
 											
 			socket.emit('input', client_packet);
@@ -114,7 +114,7 @@ var game_state = {
 		}
 		emit_taunt = function(){	
 			var client_packet = { 
-			   input: 'taunt'
+			   input: 'taunt',
 			}
 			socket.emit('input', client_packet);
 		}
@@ -134,7 +134,6 @@ var game_state = {
 			}
 			socket.emit('input', client_packet);
 		}
-		
 		player_fall_through = false;
 		opponent_fall_through = false;
 
@@ -213,9 +212,13 @@ var game_state = {
 		var ground = platforms.create(0, game.world.height - 52, 'ground');
 		ground.scale.setTo(10, 1);
 		ground.body.immovable = true;
+
+		//  Now let's create two ledges
+
 		
 		
 		//  creating platforms for the players to jump on
+
 		var ledge = platforms.create(738, 576, 'ground');
 		ledge.scale.setTo(.1, .1);
 		ledge.body.immovable = true;
@@ -314,7 +317,10 @@ var game_state = {
 			opponent_score_text = game.add.text(50,750, String(opponent_score), { fontSize: '32px', fill: '#000' });
 		}
 		
+		//This is for the fog that will play when a player gets 8 taunts
+
 		//emitters for smoke effects that are added when a player reaches a score of 8
+
 		emitter1 = game.add.emitter(160, 770, 400);
 		emitter2 = game.add.emitter(205, 735, 400);
 		emitter3 = game.add.emitter(276.25, 770, 400);
@@ -426,12 +432,16 @@ var game_state = {
 			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_2, this, p_or_o);
 		}
 		start_taunt_2 = function(p_or_o){
-			p_or_o.frame = 8;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_3, this, p_or_o);
+			if(p_or_o.purse == true){
+				p_or_o.frame = 8;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_3, this, p_or_o);
+			}else stop_taunt();
 		}
 		start_taunt_3 = function(p_or_o){
-			p_or_o.frame = 9;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_4, this, p_or_o);
+			if(p_or_o.purse == true){
+				p_or_o.frame = 9;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_4, this, p_or_o);
+			}else stop_taunt();
 		}
 		start_taunt_4 = function(p_or_o){
 			p_or_o.frame = 8;
@@ -572,7 +582,6 @@ var game_state = {
 				player.loadTexture(player_character + '_no_purse', 0, false);	
 			}, this);
 		}
-
 		if (opponent_packet.input == 'left')
 		{
 			//  Move to the left
