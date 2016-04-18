@@ -132,12 +132,6 @@ var game_state = {
 			}
 			socket.emit('input', client_packet);
 		}
-		emit_score = function(score){
-			var client_packet = {
-				input: score
-			}
-			socket.emit('input', client_packet);
-		}
 		player_fall_through = false;
 		opponent_fall_through = false;
 
@@ -435,12 +429,16 @@ var game_state = {
 			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_2, this, p_or_o);
 		}
 		start_taunt_2 = function(p_or_o){
-			p_or_o.frame = 8;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_3, this, p_or_o);
+			if(p_or_o.purse == true){
+				p_or_o.frame = 8;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_3, this, p_or_o);
+			}else stop_taunt();
 		}
 		start_taunt_3 = function(p_or_o){
-			p_or_o.frame = 9;
-			game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_4, this, p_or_o);
+			if(p_or_o.purse == true){
+				p_or_o.frame = 9;
+				game.time.events.add(Phaser.Timer.QUARTER * 2, start_taunt_4, this, p_or_o);
+			}else stop_taunt();
 		}
 		start_taunt_4 = function(p_or_o){
 			p_or_o.frame = 8;
@@ -470,7 +468,6 @@ var game_state = {
 				}
 				else if(p_or_o == player){
 					player_score += 1;
-					emit_score(player_score);
 					player_score_text.text = String(player_score);
 					if(player_score > 7){
 						player_score_text.addColor('#f70505', 0);
@@ -579,9 +576,6 @@ var game_state = {
 				can_move = true;
 				player.loadTexture(player_character + '_no_purse', 0, false);	
 			}, this);
-		}
-		if (opponent_packet.input == 1 ||opponent_packet.input == 2 ||opponent_packet.input == 3 ||opponent_packet.input == 4 ||opponent_packet.input == 5 ||opponent_packet.input == 6 ||opponent_packet.input == 7 ||opponent_packet.input == 8 ||opponent_packet.input == 9 || opponent_packet.input == 10 ){
-			opponent_score_text.text = String(opponent_packet.input);
 		}
 		if (opponent_packet.input == 'left')
 		{
