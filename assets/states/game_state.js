@@ -46,6 +46,8 @@ var game_state = {
 		var player_score_text;
 		var opponent_score_text;
 		
+		timer_start = false;
+		
 		frame = false;
 		
 		left = function(x,y){
@@ -172,7 +174,8 @@ var game_state = {
 		});
 
 		socket.on('opponent input', opponent_input_func = function(input){
-			/* if(packet_queue.length<10) */ packet_queue.push(input);
+			if (input == 'timer_start') timer_start = true;
+			else packet_queue.push(input);
 		});
 		
 		game.stage.disableVisibilityChange = true;
@@ -486,6 +489,8 @@ var game_state = {
 		
 		
 		can_move = false;
+		socket.emit('input', 'timer_start');
+		while(!timer_start); // wait for player ready to start
 		start_counter_text = game.add.text(game.world.centerX, game.world.centerY, '3', { font: '75px Arial', fill: '#14fe14', align: 'center' });
 		start_counter_text.anchor.setTo(0.5,0.5);
 		game.time.events.add(Phaser.Timer.SECOND, function(){ start_counter_text.text = '2'; }, this);
@@ -620,8 +625,6 @@ var game_state = {
 		{
 			opponent_fall_through = true;
 		}
-	
-		//  Allow the opponent to jump if they are touching the ground.
 
 		// reset opponent input
 		if(dash_count >= 4){
@@ -632,11 +635,11 @@ var game_state = {
 		opponent_packet.x = null;
 		opponent_packet.y = null;
 		
-		// skip client processing every other frame
+		/* // skip client processing every other frame
 		if(!frame) {
 			frame = true;
 			return;
-		}
+		} */
 		//  player ------------------------------------------------------------------------------------------------			
 		
 		// player fall through platform?
