@@ -529,6 +529,18 @@ var game_state = {
 		opponent_collide = game.physics.arcade.overlap(purse, opponent, null, null, this);
 		
 		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
+		if(opponent_score == 10){
+			socket.emit('game end', playerID);
+			socket.removeListener('purse swap', purse_swap_func);
+			socket.removeListener('opponent input', opponent_input_func);
+			game.state.start('game_end', false, true, 'lose', player_score, opponent_score);
+		}
+		if(player_score == 10){
+			socket.emit('game end', playerID);
+			socket.removeListener('purse swap', purse_swap_func);
+			socket.removeListener('opponent input', opponent_input_func);
+			game.state.start('game_end', false, true, 'win', player_score, opponent_score);
+		}
 		
 		//check for purse collision
 		if(purse_collide){
