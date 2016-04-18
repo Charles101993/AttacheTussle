@@ -38,7 +38,8 @@ var game_state = {
 		var opponent;
 		var platforms;
 		var cursors;
-
+		
+		//queue of packets to be sent to the server
 		packet_queue = [];
 		
 		player_score = 0;
@@ -48,6 +49,7 @@ var game_state = {
 		
 		frame = false;
 		
+		//below are fucntions for each packet to be sent when a key is pressed
 		left = function(x,y){
 			
 			var client_packet = { 
@@ -162,12 +164,13 @@ var game_state = {
 
 
 	create: function(){
+		//add audio needed in the game state
 		butt_bump_sound = game.add.audio('butt_bump_sound');
 		crowd_gasp = game.add.audio('crowd_gasp');
 		oh_yeah = game.add.audio('oh_yeah');
 		whoosh = game.add.audio('whoosh');
-		timer_beep = game.add.audio('timer_beep');
 		
+		//sockets for swapping the purse and listening for opponent input
 		socket.on('purse swap', purse_swap_func = function(input){
 			opponent_swap = input;
 		});
@@ -183,6 +186,7 @@ var game_state = {
 		game.camera.height = 800;
 		game.camera.width = 800;
 		
+		//add music to be played and stop the menu music
 		menu_music.stop();
 		
 		game_music = game.add.audio('game_music');
@@ -203,15 +207,12 @@ var game_state = {
 		platforms.enableBody = true;
 
 		// Here we create the ground.
-		var ground = platforms.create(0, game.world.height, 'ground');
+		var ground = platforms.create(0, game.world.height - 52, 'ground');
 		ground.scale.setTo(10, 1);
 		ground.body.immovable = true;
 		
-		ground = platforms.create(0, game.world.height - 51, 'ground');
-		ground.scale.setTo(10, 1);
-		ground.body.immovable = true;
 		
-		//  Now let's create two ledges
+		//  creating platforms for the players to jump on
 		var ledge = platforms.create(738, 576, 'ground');
 		ledge.scale.setTo(.1, .1);
 		ledge.body.immovable = true;
@@ -289,6 +290,7 @@ var game_state = {
 		ledge.body.immovable = true;
 		ledge.scale.setTo(.1,.1);
 		ledge.anchor.setTo(0.5, 0.5);
+		
 		// The player and its settings
 		if(playerID == 'player 1'){
 			player = game.add.sprite(5, game.world.height - 150, player_character + '_no_purse');
@@ -309,7 +311,7 @@ var game_state = {
 			opponent_score_text = game.add.text(50,750, String(opponent_score), { fontSize: '32px', fill: '#000' });
 		}
 		
-		
+		//emitters for smoke effects that are added when a player reaches a score of 8
 		emitter1 = game.add.emitter(160, 770, 400);
 		emitter2 = game.add.emitter(205, 735, 400);
 		emitter3 = game.add.emitter(276.25, 770, 400);
@@ -362,7 +364,7 @@ var game_state = {
 		game.physics.arcade.enable(opponent);
 		game.physics.arcade.enable(purse);
 		
-		game.physics.arcade.OVERLAP_BIAS = 9;
+		game.physics.arcade.OVERLAP_BIAS = 15;
 		
 		//  Our controls.
 		cursors = game.input.keyboard.createCursorKeys();
@@ -395,6 +397,8 @@ var game_state = {
 		opponent.animations.add('r_ass', [12], 10, true);
 		opponent.animations.add('taunt', [7,8,9,8], 1, true);
 
+		
+		//assignments of the keys for player inputs
 		a_key = game.input.keyboard.addKey(Phaser.Keyboard.A);
 		d_key = game.input.keyboard.addKey(Phaser.Keyboard.D);
 		s_key = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -489,7 +493,7 @@ var game_state = {
 		player.dash = true;
 		player.taunt = true;
 		
-		
+		//timer that is used at the start of the game state
 		can_move = false;
 		start_counter_text = game.add.text(game.world.centerX, game.world.centerY, '3', { font: '75px Arial', fill: '#14fe14', align: 'center' });
 		start_counter_text.anchor.setTo(0.5,0.5);
@@ -511,6 +515,7 @@ var game_state = {
 		
 		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
 		
+		//check for purse collision
 		if(purse_collide){
 			purse.destroy();
 			player.purse = true;
@@ -640,10 +645,10 @@ var game_state = {
 		opponent_packet.y = null;
 		
 		// skip client processing every other frame
-		if(!frame) {
+		/* if(!frame) {
 			frame = true;
 			return;
-		}
+		} */
 		//  player ------------------------------------------------------------------------------------------------			
 		
 		// player fall through platform?
@@ -659,6 +664,7 @@ var game_state = {
 		
 		player.body.velocity.x = 0;
 
+		//player functions for animation swapping and sound effects
 		if(can_move == true){
 			if(s_key.isDown && player.purse == true && player.taunt == true){
 				oh_yeah.play();

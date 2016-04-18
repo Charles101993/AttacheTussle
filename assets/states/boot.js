@@ -16,7 +16,6 @@ var boot = {
 		game.load.audio('crowd_gasp', 'assets/crowd_gasp.mp3');
 		game.load.audio('oh_yeah', 'assets/oh_yeah.mp3');
 		game.load.audio('whoosh', 'assets/whoosh.mp3');
-		game.load.audio('timer_beep', 'assets/timer_beep.mp3');
 		game.load.image('loadingbackground', 'assets/loadingbackground.png');
 	},
 	
