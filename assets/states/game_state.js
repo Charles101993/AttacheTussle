@@ -53,7 +53,8 @@ var game_state = {
 			var client_packet = { 
 			   input: 'left',
 				    x: x,
-				    y: y 
+				    y: y,
+				    _score: player_score
 			}
 											
 			socket.emit('input', client_packet);
@@ -206,6 +207,7 @@ var game_state = {
 		ground.scale.setTo(10, 1);
 		ground.body.immovable = true;
 
+
 		//  Now let's create two ledges
 		var ledge = platforms.create(738, 576, 'ground');
 		ledge.scale.setTo(.1, .1);
@@ -304,7 +306,7 @@ var game_state = {
 			opponent_score_text = game.add.text(50,750, String(opponent_score), { fontSize: '32px', fill: '#000' });
 		}
 		
-		
+		//This is for the fog that will play when a player gets 8 taunts
 		emitter1 = game.add.emitter(160, 770, 400);
 		emitter2 = game.add.emitter(205, 735, 400);
 		emitter3 = game.add.emitter(276.25, 770, 400);
@@ -560,6 +562,7 @@ var game_state = {
 		{
 			//  Move to the left
 			opponent.body.velocity.x = -200;
+			opponent_score = opponent_packet._score;
 
 			opponent.animations.play('left');
 		}
@@ -657,8 +660,8 @@ var game_state = {
 				oh_yeah.play();
 				player.animations.stop();
 				can_move = false;
-				emit_taunt();
 				start_taunt_1(player);
+				emit_taunt();
 			}
 			else if(a_key.isDown && player.dash == true){
 				whoosh.play();
