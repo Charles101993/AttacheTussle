@@ -644,11 +644,11 @@ var game_state = {
 		opponent_packet.x = null;
 		opponent_packet.y = null;
 		
-		/* // skip client processing every other frame
+		// skip client processing every other frame
 		if(!frame) {
 			frame = true;
 			return;
-		} */
+		}
 		//  player ------------------------------------------------------------------------------------------------			
 		
 		// player fall through platform?
