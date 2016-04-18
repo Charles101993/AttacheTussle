@@ -479,11 +479,19 @@ ledge.anchor.setTo(0.5, 0.5);
 
 		}
 
-		
 		player.purse = false;
 		opponent.purse = false;
 		player.dash = true;
 		player.taunt = true;
+		
+		
+		can_move = false;
+		start_counter_text = game.add.text(game.world.centerX, game.world.centerY, '3', { font: '75px Arial', fill: '#000', align: 'center' });
+		start_counter_text.anchor.setTo(0.5,0.5);
+		game.time.events.add(Phaser.Timer.SECOND, function(){ start_counter_text.text = '2'; }, this);
+		game.time.events.add(Phaser.Timer.SECOND*2, function(){ start_counter_text.text = '1'; }, this);
+		game.time.events.add(Phaser.Timer.SECOND*3, function(){ start_counter_text.text = 'Start!'; can_move = true; }, this);
+		game.time.events.add(Phaser.Timer.SECOND*3.5, function(){ start_counter_text.destroy(); }, this);
 		
 	},
 	
