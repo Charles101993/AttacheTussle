@@ -755,6 +755,10 @@ var game_state = {
 				player_fall_through = true;
 				down(player.x, player.y);
 			}
+
+			if(player.y > game.world.height - 85){
+				player.y = game.world.height - 85;
+			}
 			
 		}
 		
