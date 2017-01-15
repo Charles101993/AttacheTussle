@@ -64,8 +64,6 @@ var processRequest = function(socket){
 		READY_QUEUE.push(socket);
 		console.log('> ready queue: ' + READY_QUEUE.length + '\n');
 
-
-		
 		if(READY_QUEUE.length > 1){
 			
 			var player1 = READY_QUEUE.shift();
@@ -260,10 +258,6 @@ var processSession = function(player1,player2){
 	
 }
 
-if(io.use(p2pserver)){
-	console.log('connected using websockets');
-}
-
 io.on('connection', function(socket){
 	// generate id for socket
 	socket.id = Math.floor(Math.random() * (1000 - 0) + 0);
@@ -271,7 +265,7 @@ io.on('connection', function(socket){
 	
 	SOCKET_LIST[socket.id] = socket;
 	// begin serving client
-	processRequest(socket);	
+	processRequest(socket);
 
 	
 });

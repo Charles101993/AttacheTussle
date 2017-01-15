@@ -153,6 +153,7 @@ var game_state = {
 	
 	//loading all assets that will be shown in the game state
 	preload: function(){
+		
 	    game.load.image('vjoy_base', 'assets/base.png');
 		game.load.image('vjoy_body', 'assets/body.png');
 	    game.load.image('vjoy_cap', 'assets/cap.png');
@@ -170,20 +171,22 @@ var game_state = {
 		game.load.spritesheet('c3_onground', 'assets/c3_onground.png', 74.5, 74);
 		game.load.spritesheet('smoke', 'assets/smoke.png', 255.2, 239);
 		game.load.spritesheet('button', 'assets/button.png');
-			
+		
 	},
 	
-
-
 	create: function(){
-
-
+		
+		socket.removeListener('opponent disconnect', character_select_disc);
+		socket.once('opponent disconnect', game_disconnect = function(input){
+			game.state.start('game_end', false, true, 'win', null, null, true);
+			socket.removeAllListeners();
+		});
+		
 		butt_bump_sound = game.add.audio('butt_bump_sound');
 		crowd_gasp = game.add.audio('crowd_gasp');
 		oh_yeah = game.add.audio('oh_yeah');
 		whoosh = game.add.audio('whoosh');
 
-		
 		socket.on('purse swap', purse_swap_func = function(input){
 			opponent_swap = input;
 		});

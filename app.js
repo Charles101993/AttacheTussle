@@ -100,7 +100,7 @@ app.use('/assets',express.static(__dirname + '/assets'));
 serv.listen(process.env.PORT || 10002); //process.env.PORT || 
 console.log("> Server started...\n");
  
-var io = require('socket.io')(serv,{});
+var io = require('socket.io')(serv,{}); 
  
  // list of sockets mapped to generated id
 var SOCKET_LIST = {};
@@ -122,6 +122,19 @@ var processRequest = function(socket){
 			
 			var player1 = READY_QUEUE.shift();
 			var player2 = READY_QUEUE.shift();
+			
+			player1.once('disconnect', function(){
+				console.log('> player ' + player2.id + ' wins by opponent disconnect\n');
+				player2.emit('opponent disconnect', null);
+				player2.removeAllListeners();
+				processRequest(player2);
+			});
+			player2.once('disconnect', function(){
+				console.log('> player ' + player1.id + ' wins by opponent disconnect\n');
+				player1.emit('opponent disconnect', null);
+				player1.removeAllListeners();
+				processRequest(player1);
+			});
 			
 			console.log('> match found for player ' + player1.id + ' and ' + player2.id);
 
@@ -299,6 +312,11 @@ io.sockets.on('connection', function(socket){
 
 	socket.once('disconnect', function(){
 		console.log('> player ' + socket.id + ' has disconnected\n');
+		delete SOCKET_LIST[socket.id];
+		var index = READY_QUEUE.indexOf(socket);
+		if (index > -1) { 
+			READY_QUEUE.splice(index,1);
+		}
 	});
 	
 	// begin serving client
