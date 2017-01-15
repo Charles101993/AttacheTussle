@@ -1,3 +1,92 @@
+//*******************************************************              NICKS CODE              *******************************************
+
+//Initialize and connect to MongoDB for the database
+
+var MongoClient = require('mongodb').MongoClient;
+var MongoURI = "mongodb://charles101993:5138008cB5138008cB@jello.modulusmongo.net:27017/i6Dyzuqy";
+var db;
+
+
+//Right way to connect (once then re-use the object) but gives an error
+MongoClient.connect(MongoURI, function (err, database) {
+	if(err) throw err;
+	db = database;
+	
+});
+
+function display_all_users(){
+	db.collection('users').find({},{email: 1, _id: 0}).toArray(function (err, result) {
+		if (err) throw err;
+		console.log(result);
+	});	
+}
+
+function add_user(email){
+	//bad way to connect (in every function) but doesnt give an error
+	MongoClient.connect(MongoURI, function (err, db) {
+		if (err) throw err
+	        db.collection('users').insert({
+			email: email,
+			c4_unlocked: 0,
+			Wins: 0,
+			Losses: 0,
+			Total_Taunts: 0,	
+		});
+	});
+}
+
+function email_available(email){
+	//bad way to connect (in every function) but doesnt give an error
+	var returnbool = true;
+	MongoClient.connect(MongoURI, function (err, db) {
+		if (err) throw err
+	        db.collection('users').find({email},{email: 1, _id: 0}).toArray(function (err, result) {
+			if (err) throw err
+			console.log("Number of users named " + email + ": " + result.length);
+			if(result.length = 0) returnbool = true;
+			else                  returnbool = false;
+	  	})
+	});
+	return returnbool;
+
+}
+
+function remove_users(){	//THIS WILL DELETE THE ENTIRE TABLE USE FOR ONLY TESTING PUPROSES
+	//bad way to connect (in every function) but doesnt give an error
+	MongoClient.connect(MongoURI, function (err, db) {
+		if (err) throw err
+	        db.collection('users').remove({});
+	});
+}
+
+
+function try_user(email){
+	if(email_available(email)){
+		console.log(email + " is avaialable.");
+		add_user(email);
+	}
+	else{	
+		console.log(email + " is not avaialable.");
+	}
+	
+}
+
+if(0) {
+	console.log("Removing users.");
+	remove_users();
+}
+if(1){
+	try_user("test@gmail.com");
+}
+if(0){
+	add_user("test@gmail.com");
+}
+display_all_users();
+
+
+//*******************************************************       END OF NICKS CODE              *******************************************
+
+
 var express = require('express');
 var app = express();
 var serv = require('http').Server(app);
@@ -8,7 +97,7 @@ app.get('/',function(req, res) {
 
 app.use('/assets',express.static(__dirname + '/assets'));
 
-serv.listen(process.env.PORT || 10000);
+serv.listen(process.env.PORT || 10002); //process.env.PORT || 
 console.log("> Server started...\n");
  
 var io = require('socket.io')(serv,{});
