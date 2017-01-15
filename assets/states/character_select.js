@@ -28,6 +28,12 @@ var character_select = {
 	//create the screen that is sent to both clients
 	create: function() {
 		
+		socket.once('opponent disconnect', character_select_disc = function(input){
+			menu_music.destory();
+			socket.removeAllListeners();
+			game.state.start('start_menu');
+		});
+		
 		socket.on('opponent character', opponent_char_func = function(input){
 			opponent_char_counter = input;
 		});
