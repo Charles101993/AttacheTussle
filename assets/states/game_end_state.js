@@ -25,7 +25,7 @@ var game_end_state = {
 				mainMenuButton.destroy();
 				rematchButton.destroy();
 				
-				waitingButton = game.add.sprite(400, 500, 'ready_button', 2);
+				waitingButton = game.add.sprite(400, 400, 'ready_button', 2);
 				waitingButton.anchor.setTo(0.5, 0.5);
 				
 				socket.emit('game end choice', 'rematch');
@@ -56,17 +56,16 @@ var game_end_state = {
 			});
 		}
 		
-		game.scale.setGameSize(800, 600);
 		
 		game_music.destroy();
 		
 		game.add.sprite(0,0,'background');
 		
-		mainMenuButton = game.add.button(100, 500, 'main menu', mainMenu, this, 1, 0, 2);
+		mainMenuButton = game.add.button(100, 400, 'main menu', mainMenu, this, 1, 0, 2);
 		mainMenuButton.anchor.setTo(0.5, 0.5);
 		
 		if (!opponent_disconnect) {
-			rematchButton = game.add.button(700, 500, 'rematch', rematch, this, 1, 0, 2);
+			rematchButton = game.add.button(700, 400, 'rematch', rematch, this, 1, 0, 2);
 			rematchButton.anchor.setTo(0.5, 0.5);
 		}
 		
