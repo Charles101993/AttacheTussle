@@ -27,6 +27,12 @@ var character_select = {
 	
 	//create the screen that is sent to both clients
 	create: function() {
+
+		socket.once('opponent disconnect', character_select_disc = function(input){
+			menu_music.destroy();
+ 			socket.removeAllListeners();
+ 			game.state.start('start_menu');
+ 		});
 		
 		socket.once('opponent disconnect', character_select_disc = function(input){
 			menu_music.destroy();
@@ -54,7 +60,7 @@ var character_select = {
 				
 				//choose which sprite to display
 				
-				if(player_char_counter > 2) player_char_counter = 0;
+				if(player_char_counter > 3) player_char_counter = 0;
 				console.log(player_char_counter);
 				switch(player_char_counter){
 					case 0: player_character.frame = 0;
@@ -63,64 +69,56 @@ var character_select = {
 					   break;
 					case 2: player_character.frame = 2;
 					   break;
+					case 3: player_character.frame = 3;
+			   		   break;
 				}
 				
 				socket.emit('player character',player_char_counter);
 			}
 		});
 		
-		//menu_music = game.add.audio('menu_music');
+	
 		
-		if(menu_music == null){
-			
-			menu_music = game.add.audio('menu_music');
-			this.menuMusic.loop = true;
-			menu_music.play();
-		}
-		else if(menu_music.isPlaying == false){
-			
-			menu_music.play();
-		}
+		background = game.add.sprite(0, 0, 'character_select_background');
+		background.scale.setTo(1.125,.75);
 		
-		game.add.sprite(0, 0, 'character_select_background');
-		
-		waitingButton = game.add.sprite(400, 500, 'ready_button', 2);
+		waitingButton = game.add.sprite(400, 400, 'ready_button', 2);
 		waitingButton.anchor.setTo(0.5, 0.5);
 		
-		readyButton = this.game.add.button(400, 500, 'ready_button', this.playerReady, this, 1, 0, 1);
+		readyButton = this.game.add.button(400, 400, 'ready_button', this.playerReady, this, 1, 0, 1);
 		readyButton.anchor.setTo(0.5, 0.5);
 		
 		//if the client is assigned the ID player 1, load that clients assets
 		if(playerID == 'player 1'){
 			
-			player_character = game.add.sprite(150,350, 'sample_character',0);
+			player_character = game.add.sprite(150,300, 'sample_character',0);
 			player_character.anchor.setTo(0.5, 0.5);
 			player_character.animations.add('characters', [0,1,2]);
 	
-			downButton = this.game.add.button(150, 450, 'down_arrow', this.nextChar, this, 1, 0, 2);
+			downButton = this.game.add.button(150, 400, 'down_arrow', this.nextChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
 		
-			upButton = this.game.add.button(150, 250, 'up_arrow', this.prevChar, this, 1, 0, 2);
+			upButton = this.game.add.button(150, 200, 'up_arrow', this.prevChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
-			opponent_character = game.add.sprite(650,350, 'sample_character',0);
+			opponent_character = game.add.sprite(650,300, 'sample_character',0);
 			opponent_character.anchor.setTo(0.5, 0.5);
 		}
 		
 		//if the client is assigned the ID player 2, load that clients assets
 		else if(playerID == 'player 2'){
 			
-			player_character = game.add.sprite(650,350, 'sample_character',0);
+			player_character = game.add.sprite(650,300, 'sample_character',0);
 			player_character.anchor.setTo(0.5, 0.5);
 			player_character.animations.add('characters', [0,1,2]);
 	
-			downButton = this.game.add.button(650, 450, 'down_arrow', this.prevChar, this, 1, 0, 2);
+			downButton = this.game.add.button(650, 400, 'down_arrow', this.prevChar, this, 1, 0, 2);
 			downButton.anchor.setTo(0.5, 0.5);
 		
-			upButton = this.game.add.button(650, 250, 'up_arrow', this.nextChar, this, 1, 0, 2);
+			upButton = this.game.add.button(650, 200, 'up_arrow', this.nextChar, this, 1, 0, 2);
 			upButton.anchor.setTo(0.5, 0.5);
 			
-			opponent_character = game.add.sprite(150,350, 'sample_character',0);
+			opponent_character = game.add.sprite(150,300, 'sample_character',0);
 			opponent_character.anchor.setTo(0.5, 0.5);
 		}
 	
@@ -141,7 +139,7 @@ var character_select = {
 		
 		//choose which sprite to display
 		
-		if(player_char_counter < 0) player_char_counter = 2;
+		if(player_char_counter < 0) player_char_counter = 3;
 		console.log(player_char_counter);
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
@@ -149,6 +147,8 @@ var character_select = {
 			case 1: player_character.frame = 1;
 			   break;
 			case 2: player_character.frame = 2;
+			   break;
+			case 3: player_character.frame = 3;
 			   break;
 		}
 		
@@ -171,7 +171,7 @@ var character_select = {
 		
 		//choose which sprite to display
 		
-		if(player_char_counter > 2) player_char_counter = 0;
+		if(player_char_counter > 3) player_char_counter = 0;
 		console.log(player_char_counter);
 		switch(player_char_counter){
 			case 0: player_character.frame = 0;
@@ -179,6 +179,8 @@ var character_select = {
 			case 1: player_character.frame = 1;
 			   break;
 			case 2: player_character.frame = 2;
+			   break;
+			case 3: player_character.frame = 3;
 			   break;
 		}
 		
@@ -219,6 +221,8 @@ var character_select = {
 			case 1: opponent_character.frame = 1;
 			   break;
 			case 2: opponent_character.frame = 2;
+			   break;
+			case 3: opponent_character.frame = 3;
 			   break;
 		}
 
