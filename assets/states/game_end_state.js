@@ -57,7 +57,8 @@ var game_end_state = {
 		
 		game.scale.setGameSize(900, 450);
 		
-		game.add.sprite(0,0,'background');
+		background = game.add.sprite(0,0,'background');
+		background.scale.setTo(1.125, .75)
 		
 		mainMenuButton = game.add.button(100, 400, 'main menu', mainMenu, this, 1, 0, 2);
 		mainMenuButton.anchor.setTo(0.5, 0.5);
