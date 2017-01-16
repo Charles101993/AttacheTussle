@@ -1,7 +1,7 @@
 //*******************************************************              NICKS CODE              *******************************************
 
 //Initialize and connect to MongoDB for the database
-
+/* 
 var MongoClient = require('mongodb').MongoClient;
 var MongoURI = "mongodb://charles101993:5138008cB5138008cB@jello.modulusmongo.net:27017/i6Dyzuqy";
 var db;
@@ -82,7 +82,7 @@ if(0){
 	add_user("test@gmail.com");
 }
 display_all_users();
-
+ */
 
 //*******************************************************       END OF NICKS CODE              *******************************************
 

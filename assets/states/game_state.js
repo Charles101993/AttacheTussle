@@ -508,7 +508,7 @@ var game_state = {
 		opponent.purse = false;
 		player.dash = true;
 		player.taunt = true;
-		opponent_loaded = false;
+		this.opponent_loaded = false;
 		can_move = false;
 		counter_text = game.add.text(game.world.centerX, game.world.centerY, '3', { font: '75px Arial', fill: '#14fe14', align: 'center' });
 		counter_text.anchor.setTo(0.5,0.5);
@@ -529,16 +529,16 @@ var game_state = {
 	update: function(){
 		game.physics.arcade.collide(purse, platforms);
 		if(packet_queue.length > 0) opponent_packet = packet_queue.shift();
-		if(opponent_packet.input == 'opponent_loaded'){
+		if(opponent_packet.input == 'opponent_loaded' && !this.opponent_loaded){
 			console.log("opponent_loaded");
-			opponent_loaded = true;
+			this.opponent_loaded = true;
 			start_counter_text();
 		}
 		
 		purse_collide = game.physics.arcade.overlap(player, purse, null, null, this);
 		opponent_collide = game.physics.arcade.overlap(purse, opponent, null, null, this);
 		player_collide = game.physics.arcade.overlap(player, opponent, null, null, this);
-		if(opponent_loaded == false){emit_loaded();}
+		if(this.opponent_loaded == false){emit_loaded();}
 		else
 		{
 			if(opponent_score == 10){

@@ -29,7 +29,7 @@ var character_select = {
 	create: function() {
 		
 		socket.once('opponent disconnect', character_select_disc = function(input){
-			menu_music.destory();
+			menu_music.destroy();
 			socket.removeAllListeners();
 			game.state.start('start_menu');
 		});
