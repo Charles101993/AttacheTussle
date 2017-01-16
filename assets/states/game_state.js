@@ -222,7 +222,7 @@ var game_state = {
 		var deviceRatio = 1;
 		sky.scale.setTo(1.125,.5625);
 
-		purse = game.add.sprite(380, game.world.height - 750, 'purse');
+		purse = game.add.sprite(433, game.world.height - 750, 'purse');
 
 		//  The platforms group contains the ground and the 2 ledges we can jump on
 		platforms = game.add.group();
