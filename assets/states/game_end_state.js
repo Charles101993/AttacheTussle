@@ -30,7 +30,6 @@ var game_end_state = {
 				
 				socket.emit('game end choice', 'rematch');
 				if(opponent_rematch == true){
-					music_start = true;
 					game.state.start('character_select');
 				}
 				else
@@ -56,8 +55,7 @@ var game_end_state = {
 			});
 		}
 		
-		
-		game_music.destroy();
+		game.scale.setGameSize(900, 450);
 		
 		game.add.sprite(0,0,'background');
 		
@@ -79,7 +77,6 @@ var game_end_state = {
 				game.state.start('start_menu');
 			}
 			else if( (player_rematch == true) && (opponent_rematch == true) ){
-				music_start = true;
 				game.state.start('character_select');
 			}
 		}
