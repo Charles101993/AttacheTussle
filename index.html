@@ -44,7 +44,7 @@ var music_start = false;
 var opponent_swap = false;
 var cursors;
 
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
+var game = new Phaser.Game( 900, 450, Phaser.AUTO, '');
 
 game.state.add('boot', boot);
 game.state.add('start_menu', start_menu);
@@ -53,29 +53,36 @@ game.state.add('character_select', character_select);
 game.state.add('game', game_state);
 game.state.add('game_end', game_end_state);
 
-game.state.start('boot');
+//if(googlePlayId != null){
+    game.state.start('boot');    
+//}
+
+//else{
+    /*
+    -------------DO LATER-------------------
+    tell them they can't play or some shit
+    */
+//}
 
 </script>
 <style>
 html, body {
-    height:100%;
-    min-height: 1200px;
+    height:600px;
+    width: 900px;
 }
-div.absolute {
-    position: absolute;
-    top: 800px;
-    left: 30%;
-    right:30%;
-    color: white;
-} 
-div.keys {
-    position: relative;
-    top: 0px;
-    left: 10%;
-    right:10%;
-    color: white;
-}
+
 </style>
+
+
+<script type="text/javascript">
+/*
+var googlePlayId;
+    function getGooglePlayId( {
+        googlePlayId = Android.getPlayId();
+        return googlePlayId;
+    }
+*/
+</script>
 
 </body>
 </html>
