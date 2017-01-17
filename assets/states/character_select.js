@@ -28,6 +28,15 @@ var character_select = {
 	//create the screen that is sent to both clients
 	create: function() {
 
+		// Create a custom timer
+        timer = game.time.create();
+        
+        // Create a delayed event 1m and 30s from now
+        timerEvent = timer.add(Phaser.Timer.SECOND * 10, this.endTimer, this);
+        
+        // Start the timer
+        timer.start();
+
 		socket.once('opponent disconnect', character_select_disc = function(input){
 			
  			socket.removeAllListeners();
@@ -235,6 +244,27 @@ var character_select = {
 			
 			game.state.start('game', false, true, player_char_counter, opponent_char_counter);
 		}
-	}
+	},
+	render: function () {
+        // If our timer is running, show the time in a nicely formatted way, else show 'Done!'
+        if (timer.running) {
+            game.debug.text(this.formatTime(Math.round((timerEvent.delay - timer.ms) / 1000)), 400, 225, "#fff");
+        }
+        else {
+            game.debug.text("Done!", 400, 325, "#0f0");
+
+        }
+    },
+    endTimer: function() {
+        // Stop the timer when the delayed event triggers
+        timer.stop();
+        this.playerReady();
+    },
+    formatTime: function(s) {
+        // Convert seconds (s) to a nicely formatted and padded time string
+        var minutes = "0" + Math.floor(s / 60);
+        var seconds = "0" + (s - minutes * 60);
+        return minutes.substr(-2) + ":" + seconds.substr(-2);   
+    }
 
 }
